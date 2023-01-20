@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block head_content %}
+
+    {% endblock %}
+    {% load static %}
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <link href="{% static 'css/modal-table.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    {% block statics_files %}
+    {% endblock %}
+</head>
+
+<body style="height: 100%; width: 100%;">
+    <!-- jquery -->
+    <script src="{% static 'js/jquery-min.js' %}"></script>
+    
+    <div  style="height: 100%; width: 100%;">
+        
+            {% include 'nav.html' %}
+            <section style=" height: 94%; display: flex; ">
+                <nav class="menu-vertical-class" id="navVertical">{% include 'nav-vertical.html' %}</nav>
+                <nav id="">{% include 'nav-responsive.html' %}</nav>
+                <article class="container-data" >
+                    {% block section %}
+
+                    {% endblock %}
+                </article>
+            </section>
+    </div>
+    <script src="{% static 'js/menu.js' %}"></script>
+    
+    <script src="{% static 'js/jquery.blockUI.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js'%}"></script>
+    <!-- javascripts -->
+    <script>
+            
+    </script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+
+</html>

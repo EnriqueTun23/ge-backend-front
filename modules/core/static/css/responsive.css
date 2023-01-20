@@ -1,0 +1,113 @@
+
+@media screen and (max-width: 992px) {
+
+    .login {
+        display: flex;
+        align-content: center;
+        width: 70%;
+        height: 500px;
+    }
+
+    .error-input {
+        margin-left: 9%;
+    }
+
+}
+
+@media screen and (max-width: 992px) and ( orientation:landscape ) {
+    .responsive-data {
+        width: 80%;
+        margin-left: 4%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .login {
+        padding: 0; 
+        width: 100%;
+        height: 812px;
+    }
+
+    .card-login-title {
+        margin-bottom: 40px;
+    }
+
+    .error-input {
+        margin-left: 15%;
+    }
+    .nav-logo {
+        margin-left: 5%;
+        width: 20%;
+        
+    }
+    .nav-logo img {
+     width: 100%;
+    }
+    #logo-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        color: white;
+        padding-left: 16px;
+    }
+    #logo-normal {
+        display: none;
+    }
+    #ejemplo {
+        display: none;
+    }
+    #navVertical {
+        display: none;
+    }
+    #table_movil {
+        visibility: visible !important;
+    }
+    .responsive-data {
+        width: 89%;
+    }
+    .user-menu {
+
+        width: 60%;
+    }
+    .user-menu div {
+        margin-left: 5px;
+        width: 20px;
+        height: 20px;
+        padding-top: 0;
+    }
+    .children {
+        width: 160px;   
+    }
+    .btn-user {
+        margin-top: 15px;
+    }
+
+    /* table tramitologia */
+    #table_desktop {
+        display: none;
+    }
+    .container-data {
+        width: 100%;
+    }
+    .btn-seccion {
+        width: 100%;
+        /* height: 70%; */
+    }
+    .responsive-search {
+        width: 45%;
+    }
+    #container-desktop {
+        display: none;
+    }
+    #container-mobil {
+        display: block;
+    }
+    .info-table-dta {
+        margin-top: 3% !important;
+        height: 9% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    /* -*---------------- */
+}

@@ -1,0 +1,18 @@
+{% extends "users/baseAdmin.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Administrativo GE</title>
+{% endblock head_content %}
+
+{% block section %}
+<h1>Hola {{user.first_name}}</h1>
+{% endblock%}
+
+
+{% block scripts %}
+<script>
+    // alert('resolucion es:' + $(window).width()+ 'x' + $(window).height() );
+</script>
+
+{% endblock %}

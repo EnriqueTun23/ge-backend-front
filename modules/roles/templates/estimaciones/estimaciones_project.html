@@ -1,0 +1,110 @@
+{% extends "base_roles.html" %}
+{% block breadcrumb %}
+<div class="ui breadcrumb" style="margin-top: 25px; margin-left: 2.5%; ">
+  <a href="{% url 'tramitologia' %}" class="section">Proyectos</a>
+    <i class="right angle icon divider"></i>
+</div>
+{% endblock %}
+{% block header %}
+<div class="ui grid">
+    <div class="row">
+      <div class="thirteen wide column"></div>
+      <div class="three wide column">
+        <div class="ui fluid action input">
+          <input type="text" name="q" value='{{ request.GET.q }}' placeholder="Buscar...">
+          <button class="ui button" type="submit">Buscar</button>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="one wide column">
+        
+      </div>
+      <div class="ten wide column" style="font-size: 14px; font-weight: bold; color: #C9C6C6;">
+        Proyecto
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+  </div>
+{% endblock %}
+{% block section_actualizacion %}
+<div class="ui grid" style="margin-top: 0px;">
+    <div class="row row-inicial" data-href="{% url 'estimacionesData' 'Montessori' '1' %}">
+      <div class="one wide column">
+        <img src="https://i.ibb.co/ZKf2Bvt/COMERCIAL.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Montessori
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+    <div class="row row-content" data-href="#" >
+      <div class="one wide column">
+        <img src="https://i.ibb.co/9Zrjm3Z/GASOLINERA.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Proyecto gasolinera Lorem ipsum dolor sit amet.
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+    <div class="row row-content" data-href="#">
+      <div class="one wide column">
+        <img src="https://i.ibb.co/c1qW8RD/Industrial.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Proyecto industrial Lorem ipsum dolor sit amet.
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+    <div class="row row-content" data-href="#">
+      <div class="one wide column">
+        <img src="https://i.ibb.co/5M0dVyg/OBRAS-PUBLICAS.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Proyecto obra pública Lorem ipsum dolor sit amet.
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+    <div class="row row-content" data-href="#">
+      <div class="one wide column">
+        <img src="https://i.ibb.co/71cPHzR/RESIDENCIAL.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Proyecto residencial Lorem ipsum dolor sit amet.
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+    <div class="row row-content" data-href="#">
+      <div class="one wide column">
+        <img src="https://i.ibb.co/ww4s23y/SERVICIOS.png" class="ui mini rounded image" >
+      </div>
+      <div class="ten wide column">
+        Proyecto servicios Lorem ipsum dolor sit amet.
+      </div>
+      <div class="two wide column"></div>
+      <div class="two wide column"></div>
+      <div class="one wide column"></div>
+    </div>
+  </div>
+{% endblock %}
+{%  block scripts_personalizade  %}
+<script>
+    jQuery(document).ready(function($) {
+      $('.row-inicial').click(function() {
+          window.location = $(this).data("href");
+      });
+  });
+  </script>
+{% endblock %}

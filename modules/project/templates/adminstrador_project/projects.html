@@ -1,0 +1,658 @@
+{% extends "users/baseAdmin.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Lista Proyectos</title>
+{% endblock head_content %}
+{% load static %}
+{% block statics_files %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
+<link rel="stylesheet" href="{% static 'css/image-picker.css' %}">
+{% endblock %}
+{% block section %}
+<section class="control">
+    <div></div>
+    <div class="btn-user">
+        <a onclick="return abrir_modal()" class="btn btn-primary">
+            <i class="plus icon" style="font-size: 24px;"></i> Crear proyecto
+        </a>
+    </div>
+</section>
+
+<!------------------------------------------------ diseño de la tabla principal ------------------------------------>
+<section class="info-section">
+    <table class="ui single line table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Proyecto</th>
+                <th>Calle</th>
+                <th>n.° Exterior</th>
+                <th>n.º Interior</th>
+                <th>C.P.</th>
+                <th>Colonia</th>
+                <th>Municipio</th>
+                <th>Estado</th>
+                <th>Usuarios relacionados</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr id="project_{{project.pk}}">
+                <td>
+                    <img src="{{project.photos.all.0}}" class="ui mini rounded image">
+
+                </td>
+                <td><input class="input-max-hover" type="text" name="name_project" value="{{project.name_project}}"
+                        id="id_name_project_{{project.pk}}" maxlength="255">
+                </td>
+                <td>
+                    <input class="input-max-hover" type="text" name="street" value="{{project.street}}"
+                        id="id_street_{{project.pk}}" maxlength="155">
+                </td>
+                <td><input class="input-min-hover" type="text" name="outdoor_number"
+                        id="id_outdoor_number_{{project.pk}}" value="{{project.outdoor_number}}" maxlength="5">
+                </td>
+                <td><input class="input-min-hover" type="text" name="interior_number"
+                        value="{{project.interior_number}}" id="id_interior_number_{{project.pk}}" maxlength="5">
+                </td>
+                <td>
+                    <input class="input-max-hover" type="number" name="cp" value="{{project.cp}}"
+                        id="id_cp_{{project.pk}}" onkeyup="keyup_personalized({{project.pk}})"
+                        oninput="maxLengthCheck(this)"
+                        onload="loadCp('{{project.cp}}', '{{project.pk}}', '{{project.suburn}}')" maxlength="5">
+                </td>
+                <td>
+                    <select class="ui dropdown suburn" id="id_suburn_{{project.pk}}">
+                        <option value="{{project.pk}}" selected>{{project.suburn}}</option>
+                    </select>
+                </td>
+                <td><input class="input-max-hover" type="text" name="municipality" id="id_municipality_{{project.pk}}"
+                        value="{{project.municipality}}" maxlength="255" readonly></td>
+                <td>
+                    <input class="input-max-hover" type="text" name="estado" id="id_estado_{{project.pk}}"
+                        value="{{project.estado}}" maxlength="155" readonly>
+                </td>
+                <td class="init-select-user" onload="loadPerson('{{project.pk}}')">
+                    <select name="skills" multiple="multiple" class="ui fluid dropdown init-select-update"
+                        id="user_{{project.pk}}">
+
+                    </select>
+                </td>
+                <td>
+                    <a style="cursor: pointer; color: #55565a; font-size: 14px;"
+                        onclick="return deleteProject('{{project.pk}}')">
+                        <i id="delete_icon_{{project.pk}}" class="trash icon"></i>
+                    </a>
+                </td>
+                <td>
+                    <a style="cursor: pointer; color: #FFC600; font-size: 14px;"
+                        onclick="return update_project('{{project.pk}}')">
+                        <i class="save icon"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+<!------------------------------------------------ creacion de un nuevo projecto--------------------------------- -->
+<div id="popup" class="ui tiny longer modal" style="height: 55% !important;">
+    <i class="close icon"></i>
+    <div class="header">
+        <h3>Crear proyecto</h3>
+    </div>
+    <div class="scrolling content" style="max-height: calc(65%); height: 65% !important;">
+        <form method="post" id="form-project" data-url="{% url 'projects_api' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="select-personalizate">
+                <label for="id_project" class="label-form-two">Usuarios relacionados</label><br>
+                <select name="skills" multiple="multiple" class="ui fluid dropdown" id="select-user">
+
+                </select>
+            </div>
+            <div class="ui two column centered grid" style="margin-top: 50px;">
+                <div class="column">
+                    <div class="ui segment">
+                        <img width="100%" height="50%" src="https://i.ibb.co/71cPHzR/RESIDENCIAL.png" alt="none"
+                            id="img-pres">
+                    </div>
+                    <label onclick="return click_img()" class="item label-form-img">
+                        Seleccionar imagen
+                    </label>
+                </div>
+            </div>
+            <div id="" class="column">
+                <select class="image-picker show-html" id="select-image">
+
+                    <option data-img-src="https://i.ibb.co/c1qW8RD/Industrial.png"
+                        value="https://i.ibb.co/c1qW8RD/Industrial.png" selected="selected">Industrial</option>
+                    <option data-img-src="https://i.ibb.co/9Zrjm3Z/GASOLINERA.png"
+                        value="https://i.ibb.co/9Zrjm3Z/GASOLINERA.png">Gasolinera</option>
+                    <option data-img-src="https://i.ibb.co/71cPHzR/RESIDENCIAL.png"
+                        value="https://i.ibb.co/71cPHzR/RESIDENCIAL.png">Residencial</option>
+                    <option data-img-src="https://i.ibb.co/ZKf2Bvt/COMERCIAL.png"
+                        value="https://i.ibb.co/ZKf2Bvt/COMERCIAL.png">Comercial</option>
+                    <option data-img-src="https://i.ibb.co/5M0dVyg/OBRAS-PUBLICAS.png"
+                        value="https://i.ibb.co/5M0dVyg/OBRAS-PUBLICAS.png">
+                        Obras publicas</option>
+                    <option data-img-src="https://i.ibb.co/ww4s23y/SERVICIOS.png"
+                        value="https://i.ibb.co/ww4s23y/SERVICIOS.png">
+                        Servicios</option>
+
+                </select>
+
+            </div>
+            <div class="form-user" style="margin-left: 5%;">
+                <div class="ui grid">
+                    <div class="fourteen wide column">
+                        <div class="ui form" style="margin-top: 15px;">
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="wrench icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two item"> Proyecto</label><br>
+                                    <input class="input-form" type="text" id="id_name_project" name="name_project"
+                                        maxlength="155" required>
+                                </div>
+                            </div>
+
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map signs icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Calle</label><br>
+                                    <input class="input-form" type="text" id="id_street" name="street" maxlength="222"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="building outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">n.º Exterior</label><br>
+                                    <input class="input-form" type="text" id="id_interior_number" name="interior_number"
+                                        maxlength="7" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="key icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">n.º Interior</label><br>
+                                    <input class="input-form" type="text" id="id_outdoor_number" name="outdoor_number"
+                                        maxlength="7">
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="envelope open outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">C.P.</label><br>
+                                    <input class="input-form" type="number" name="cp" id="id_cp" min="00000" max="99999"
+                                        oninput="maxLengthCheck(this)" maxlength="5" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map pin icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Colonia</label><br>
+                                    <select class="ui dropdown" id="create-colonia">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i style="color: #55565a; margin-bottom: 100%;"
+                                                class="tree icon icon-sizee"></i>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Localidad</label><br>
+                                    <input class="input-form" type="text" name="location" value="prueba"
+                                        id="id_location" maxlength="122" required readonly>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="thumbtack icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Municipio</label><br>
+                                    <input class="input-form" type="text" name="municipality" id="id_municipality"
+                                        maxlength="122" required readonly>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Estado</label><br>
+                                    <input class="input-form" type="text" name="estado" id="id_estado" maxlength="255"
+                                        required readonly>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex;">
+                <button class="medium ui button bt-update" style="margin: auto;" id="add_project">GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+<!------------------------------------------------ eliminacion de un projecto ----------------------------------- -->
+<div id="delete_modal" class="ui mini modal">
+    <div class="header">Header</div>
+    <div class="content">
+        <p>Desea eliminar este Projecto </p>
+    </div>
+    <div class="actions">
+        <div class="ui red cancel inverted button">
+            <i class="remove icon"></i>
+            No
+        </div>
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+<!-- ------------------------------------------------------------------------------------------------------------- -->
+
+
+{% endblock%}
+{% block scripts %}
+<script src="{% static 'js/image-picker.js' %}"></script>
+<script>
+    $('#id_imagen').val('https://i.ibb.co/s9KhS51/casa.jpg');
+    $('#id_photos').hide();
+    $('#id_imagen').hide();
+    $('#select-user').dropdown({ showOnFocus: false });
+    $('.init-select-update').dropdown();
+    $('.ui.dropdown.suburn').dropdown();
+    $('#create-colonia').dropdown({ showOnFocus: false });
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    var list = '{% url 'user_create_list' %}' + '?employee=1'
+    let optionListUser = document.getElementById('select-user').options;
+    var listaUsuarios
+    $.ajax({
+        url: list,
+        dataType: "json",
+        success: function (data) {
+            listaUsuarios = data
+            data.forEach(function (user, index) {
+                optionListUser.add(
+                    new Option(user.first_name + ' ' + user.last_name + ' - ' + user.userRol.position, user.pk, true)
+                )
+            })
+        }
+    });
+    $(function () {
+        $('.input-max-hover').trigger('onload');
+        $('.init-select-user').trigger('onload');
+    });
+
+
+    function abrir_modal(url) {
+        $('#popup').modal({ closable: false }).modal('show')
+    }
+
+
+    function deleteProject(pk) {
+        $('#delete_modal').modal({
+            closeble: false,
+            onDeny: function () {
+
+            },
+            onApprove: function () {
+                delete_project(pk)
+            }
+        }).modal('show');
+    }
+
+    function delete_project(pk) {
+        let url = '/ge/projects/' + pk + '/'
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Eliminando projecto............'
+                });
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        })
+    }
+
+
+    $('#add_project').click(function (event) {
+        event.preventDefault();
+        var project = {
+
+            'user': $('#select-user').val(),
+            'photos': [{
+                image: $('#select-image').val()
+            }],
+            'name_project': $('#id_name_project').val(),
+            'street': $('#id_street').val(),
+            'interior_number': $('#id_interior_number').val(),
+            'outdoor_number': $('#id_outdoor_number').val(),
+            'cp': $('#id_cp').val(),
+            'location': $('#id_location').val(),
+            'suburn': $('#create-colonia').val(),
+            'municipality': $('#id_municipality').val(),
+            'estado': $('#id_estado').val()
+        }
+        $.ajax({
+            url: $('#form-project').attr('data-url'),
+            type: 'POST',
+            data: JSON.stringify(project),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Creando proyecto...'
+                });
+
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        })
+    })
+    function update_project(pk) {
+
+        var project_update = {
+            "name_project": $('#id_name_project_' + pk).val(),
+            "street": $('#id_street_' + pk).val(),
+            "interior_number": $('#id_interior_number_' + pk).val(),
+            "outdoor_number": $('#id_outdoor_number_' + pk).val(),
+            "cp": $('#id_cp_' + pk).val(),
+            "suburn": $('#id_suburn_' + pk).val(),
+            "municipality": $('#id_municipality_' + pk).val(),
+            "estado": $('#id_estado_' + pk).val(),
+            "user": $('#user_' + pk).val()
+        }
+        $.ajax({
+            url:'{% url 'projects_api' %}' + pk + '/',
+            type: 'PATCH',
+            data: JSON.stringify(project_update),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Actualizando usuario...'
+                });
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            console.log(done)
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        })
+    }
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function loadCp(cp, id, colonia) {
+        var url_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + cp
+        let optionListCpReady = document.getElementById('id_suburn_' + id).options;
+        $.ajax({
+            url: url_codigos,
+            dataType: "json",
+            success: function (listaCP) {
+                $('#id_suburn_' + id).html('')
+                for (let j = 0; j < listaCP.results.length; j++) {
+                    if (listaCP.results[j].asentamiento == colonia) {
+                        optionListCpReady.add(
+                            new Option(listaCP.results[j].asentamiento + '/' + listaCP.results[j].tipo_asentamiento, listaCP.results[j].asentamiento, true, true)
+                        )
+                    } else {
+                        optionListCpReady.add(
+                            new Option(listaCP.results[j].asentamiento + '/' + listaCP.results[j].tipo_asentamiento, listaCP.results[j].asentamiento, false, false)
+                        )
+                    }
+                }
+            }
+        })
+    }
+    function loadPerson(pk) {
+        var project_udpate = '{% url 'projects_api' %}' + pk
+        let optionListUserPerson = document.getElementById('user_' + pk).options;
+        var list_usuarios = '{% url 'user_create_list' %}' + '?employee=1'
+        $.ajax({
+            url: list_usuarios,
+            dataType: "json",
+            success: function (data) {
+                $.ajax({
+                    url: project_udpate,
+                    dataType: "json",
+                    success: function (data_project) {
+                        for (let i = 0; i < data.length; i++) {
+                            var isSelect = data_project.user.find(function (item) {
+                                return item == data[i].pk
+                            });
+                            if (isSelect) {
+                                optionListUserPerson.add(
+                                    new Option(data[i].first_name, data[i].pk, true, true)
+                                )
+                            } else {
+                                optionListUserPerson.add(
+                                    new Option(data[i].first_name, data[i].pk, false, false)
+                                )
+                            }
+                        }
+                    }
+                })
+            }
+        })
+    }
+</script>
+<script>
+    $('#file-input').change(function () {
+        readURL(this);
+    })
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img-pres').attr('src', e.target.result)
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function maxLengthCheck(object) {
+        if (object.value.length > object.maxLength)
+            object.value = object.value.slice(0, object.maxLength)
+    }
+    $('#id_cp').keyup(function () {
+        var complement = $('#id_cp').val()
+        var url_api_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + complement;
+        if ($('#id_cp').val().length == 5) {
+            $('#id_estado').val('');
+            $('#id_municipality').val('');
+            search_cp(url_api_codigos);
+        } else {
+            search_cp(url_api_codigos);
+        }
+    })
+
+    function keyup_personalized(pk) {
+        var complement_personalized = $('#id_cp_' + pk).val()
+        var url_api_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + complement_personalized;
+        if ($('#id_cp_' + pk).val().length == 5)
+            $('#id_estado_' + pk).val('');
+        $('#id_municipality_' + pk).val('');
+        search_cp_personalized(url_api_codigos, pk);
+    }
+
+    function search_cp(url_search) {
+        let optionList = document.getElementById('create-colonia').options;
+        $.ajax({
+            url: url_search,
+            dataType: "json",
+            success: function (data) {
+                if (data.count == 0) {
+                } else if ($('#id_cp').val().length == 5) {
+                    $('#create-colonia').html('')
+                    $('#id_estado').val(data.results[0].estado);
+                    $('#id_municipality').val(data.results[0].municipio);
+                    data.results.forEach(function (lugar, index) {
+                        let text_asentamiento = lugar.asentamiento + '/' + lugar.tipo_asentamiento
+                        let value_asentamiento = lugar.asentamiento
+                        optionList.add(
+                            new Option(text_asentamiento, value_asentamiento)
+                        )
+                    })
+                } else {
+                    console.log('Eliminando')
+                }
+            }
+        })
+    }
+    function search_cp_personalized(url_search, pk) {
+        let optionListPersonalized = document.getElementById('id_suburn_' + pk).options;
+        $.ajax({
+            url: url_search,
+            dataType: "json",
+            success: function (data) {
+                if (data.count == 0) {
+                } else if ($('#id_cp_' + pk).val().length == 5) {
+                    $('#id_suburn_' + pk).html('')
+                    $('#id_estado_' + pk).val(data.results[0].estado);
+                    $('#id_municipality_' + pk).val(data.results[0].municipio);
+                    data.results.forEach(function (lugar, index) {
+                        let text_asentamiento = lugar.asentamiento + '/' + lugar.tipo_asentamiento
+                        let value_asentamiento = lugar.asentamiento
+                        optionListPersonalized.add(
+                            new Option(text_asentamiento, value_asentamiento)
+                        )
+                    })
+                } else {
+                    console.log('Eliminando')
+                }
+            }
+        })
+    }
+    $('#select-image').imagepicker();
+
+    $('#select-image').on('change', function () {
+        $('#img-pres').attr('src', this.value)
+        $('#id_imagen').val(this.value)
+    });
+
+
+
+
+</script>
+{% endblock %}

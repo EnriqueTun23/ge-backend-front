@@ -1,0 +1,922 @@
+{% extends "users/baseAdmin.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Lista Usuario</title>
+{% endblock head_content %}
+{% load static %}
+{% block statics_files %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% endblock %}
+{% block section %}
+<section class="control">
+    <form method='GET'>
+        <div class="ui action input">
+            <input type="text" name="q" value='{{ request.GET.q }}' placeholder="Buscar...">
+            <button class="ui button" type="submit">Buscar</button>
+        </div>
+    </form>
+    <div class="btn-user">
+        <a onclick="return abrir_modal()">
+            <i class="user plus icon" style="font-size: 24px;"></i> Crear usuario
+        </a>
+    </div>
+</section>
+
+
+
+<!-- diseño de la tabla principal -->
+<section class="info-section">
+
+
+<table class="ui single line table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Tipo de usuarios</th>
+            <th>Teléfono</th>
+            <th>Ext.</th>
+            <th>Celular</th>
+            <th>Rol(es)</th>
+            <th>Estatus</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+         <tr id="user_{{user.pk}}" class="tableP-row">
+            <td style="cursor: pointer;" > <input type="text" class="nombre-hover" value="{{user.first_name}}"  id="first_name_update_{{user.pk}}""></td>
+            <td style="cursor: pointer;"> <input type="text" class="nombre-hover" value="{{user.last_name}}" id="last_name_update_{{user.pk}}"></td>
+            {% if user.is_staff %}
+            <td style="cursor: pointer;">Admnistrador principal</td>
+            {% else %}
+            <td style="cursor: pointer;" >
+                <div class="fields">
+                    <div class="five wide field">
+                        {% if user.userPerson.employee %}
+                        <select class="ui dropdown select" id="select-data_{{user.pk}}" name="position">
+                            <option class="option-input-form" value="GE Costos"
+                                {% if user.userRol.position == 'GE Costos' %} selected {% endif %}>
+                                Costos
+                            </option>
+
+                            <option class="option-input-form" value="GE Contabilidad"
+                                {% if user.userRol.position == 'GE Contabilidad'%} selected
+                                {% endif %}>
+                                Contabilidad</option>
+
+                            <option class="option-input-form" value="GE Tramitologia"
+                                {% if user.userRol.position == 'GE Tramitologia'%} selected
+                                {% endif %}>
+                                Tramitologia</option>
+
+                            <option class="option-input-form" value="GE Estimaciones"
+                                {% if user.userRol.position == 'GE Estimaciones'%} selected
+                                {% endif %}>
+                                Estimaciones</option>
+
+                            <option class="option-input-form" value="GE Compras"
+                                {% if user.userRol.position == 'GE Compras'%} selected {% endif %}>
+                                Compras
+                            </option>
+
+                            <option class="option-input-form" value="GE Avance de Obra"
+                                {% if user.userRol.position == 'GE Avance de Obra'%} selected
+                                {% endif %}>Avance de Obra</option>
+
+                            <option class="option-input-form" value="GE Programa de obra"
+                                {% if user.userRol.position == 'GE Programa de obra'%} selected
+                                {% endif %}>Programa de obra</option>
+                            <option class="option-input-form" value="GE Residente"
+                                {% if user.userRol.position == 'GE Residente'%} selected
+                                {% endif %}>
+                                Residente</option>
+                        </select>
+                        {% elif user.userPerson.client %}
+                        <select name="position" class="ui dropdown select" id="select-data_{{user.pk}}">
+                            <option value="Cliente" selected>Cliente</option>
+                        </select>
+                        {% elif user.userPerson.supervisor_pdo %}
+                        <select name="position" class="ui dropdown select" id="select-data_{{user.pk}}">
+                            <option value="Supervisor Avance de obra" selected>Supervisor Avance de
+                                obra
+                            </option>
+                        </select>
+                        {% elif user.userPerson.supervisor_ado %}
+                        <select name="position" class="ui dropdown select " id="select-data_{{user.pk}}">
+                            <option value="Supervisor Programa de obra" selected>Supervisor Programa
+                                de obra
+                            </option>
+                        </select>
+                        {% elif user.userPerson.director  %}
+                        <select name="position" class="ui dropdown select" id="select-data_{{user.pk}}">
+                            <option value="Director" selected>Director
+                            </option>
+                        </select>
+                        {% elif user.userPerson.management  %}
+                        <select name="position" class="ui dropdown select" id="select-data_{{user.pk}}">
+                            <option value="Administrador">Administrador</option>
+                        </select>
+                        {% endif %}
+                    </div>
+            </td>
+            {% endif %}
+            <td style="cursor: pointer;"><input type="tel" class="nombre-hover" value="{{user.phone_number}}" id="phone_number_update_{{user.pk}}"></td>
+            <td style="cursor: pointer;"> <input type="tel" class="nombre-hover" value="{{user.ext}}" id="ext_update_{{user.pk}}" > </td>
+            <td style="cursor: pointer;"> <input type="tel"  class="nombre-hover" value="{{user.mobile_number}}" id="mobile_number_update_{{user.pk}}"></td>
+            <td style="cursor: pointer;">
+                {% if user.userPerson.employee %}
+                <a onclick="return roles('{{user.pk}}')">Roles</a>
+                {% endif %}
+            </td>
+            <td style="cursor: pointer;">
+                {% if  user.is_verified %}
+                <i style="color: green;" class="check circle icon"></i>
+                {% elif user.is_staff %}
+                <i style="color: green;" class="check circle icon"></i>
+                {% else %}
+                <i style="color: red;" class="times circle outline icon"></i>
+                {% endif %}
+            </td>
+            <td>
+                {% if user.is_staff %}
+                {% else %}
+                <a style="cursor: pointer; color: #55565a; font-size: 14px;" onclick="return deleteUser('{{user.pk}}')">
+                    <i id="delete_icon_{{user.pk}}" class="trash icon"></i>
+                </a>
+                {% endif %}
+        
+            </td>
+            <td>
+                <a style="cursor: pointer; color: #FFC600; font-size: 14px;" onclick="return update_user_api('{{user.pk}}')">
+                    <i class="save icon"></i>
+                </a> 
+            </td>
+            <td>
+
+            </td>
+         </tr>
+         <div id="rol_modal_{{user.pk}}" class="ui mini modal">
+            <i class="close icon"></i>
+            <div class="header">Rol(es)</div>
+            <div class="content">
+                <div class="ui form">
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="dollar sign icon"></i>
+                                    <div class="content">Costos</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.cost %} checked
+                                    {% endif %} name="cost" id="cost_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="archive icon"></i>
+                                    <div class="content">Contabilidad </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.accounting %} checked
+                                    {% endif %} name="accounting"
+                                    id="accounting_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="file alternate outline icon"></i>
+                                    <div class="content">Tramitologia </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.tramitology %} checked
+                                    {% endif %} name="tramitology"
+                                    id="tramitology_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="calculator icon"></i>
+                                    <div class="content">Estimaciones </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.estimation %} checked
+                                    {% endif %} name="estimation"
+                                    id="estimation_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="shopping bag icon"></i>
+                                    <div class="content">Compras </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.shopping %} checked
+                                    {% endif %} name="shopping" id="shopping_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="calendar alternate outline icon"></i>
+                                    <div class="content">Avance de Obra </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.construction_advance %}
+                                    checked {% endif %} name="construction_advance"
+                                    id="construction_advance_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field" style="padding-left: 0px;">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="clipboard list icon"></i>
+                                    <div class="content">Programa de obra </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.construction_program %}
+                                    checked {% endif %} name="construction_program"
+                                    id="construction_program_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="briefcase icon"></i>
+                                    <div class="content">Residente </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" {% if user.userRol.resident %} checked
+                                    {% endif %} name="resident" id="resident_update_{{user.pk}}">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+</section>
+<!----------------------------- modal crear usuario -------------------------------------------------------->
+<div id="popup" class="ui tiny longer modal" style="height: 55% !important;">
+    <i class="close icon"></i>
+    <div class="header">
+        <h3>Crear usuario</h3>
+        <div class="ui selection fluid dropdown" id="select_prueb">
+            <input type="hidden" name="gender">
+            <i class="dropdown icon"></i>
+            <div class="default text">Tipo de usuario</div>
+            <div class="menu">
+                <div class="item" data-value="1">GE Costos</div>
+                <div class="item" data-value="2">GE Contabilidad</div>
+                <div class="item" data-value="3">GE Tramitología</div>
+                <div class="item" data-value="4">GE Estimaciones</div>
+                <div class="item" data-value="5">GE Compras</div>
+                <div class="item" data-value="6">GE Avance de obra</div>
+                <div class="item" data-value="7">GE Programa de obra</div>
+                <div class="item" data-value="8">GE Residente</div>
+                <div class="item" data-value="9">Supervisor Avance de obra</div>
+                <div class="item" data-value="10">Supervisor Programa de obra</div>
+                <div class="item" data-value="11">Cliente</div>
+                <div class="item" data-value="12">Director</div>
+                <div class="item" data-value="13">Administrador</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scrolling content" style="max-height: calc(65%); height: 65% !important;">
+
+        <section class="data-info" id="data">
+            <form class="form-user" id="form_user" method="post" data-url="{% url 'user_create_list' %}">{% csrf_token %}
+                <div class="ui error message" id="card-error">
+                    <div class="header">
+                        Hubo algunos errores al guardar
+                    </div>
+                    <ul class="list" id="errors_list">
+                    </ul> 
+                  </div>
+                <div class="ui tabular menu">
+                    <div class="item active" data-tab="tab-name">Usuario</div>
+                    <div id="tab-rol" class="item" data-tab="tab-name2">Rol(es)</div>
+                </div>
+                <div class="ui  grid">
+                    <div class="column">
+                        <div class="ui tab active" data-tab="tab-name">
+                            <div class="ui form error">
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="user icon icon-sizee" style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Nombre</label><br>
+                                        <input class="input-form" type="text" name="first_name" maxlength="255"
+                                            minlength="2" id="id_first_name">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="address card outline icon icon-sizee"
+                                                    style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Apellidos</label><br>
+                                        <input class="input-form" type="text" name="last_name" maxlength="255"
+                                            minlength="2" id="id_last_name">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="phone icon icon-sizee" style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Teléfono</label><br>
+                                        <input class="input-form" type="tel" name="phone_number" maxlength="15"
+                                            id="id_phone_number"><br>
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="hashtag icon icon-sizee" style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Ext.</label><br>
+                                        <input class="input-form" type="number" name="ext" max="999" id="id_ext">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="mobile alternate icon icon-sizee"
+                                                    style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Celular</label><br>
+                                        <input class="input-form" type="number" name="mobile_number" maxlength="15"
+                                            id="id_mobile_number">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="envelope outline icon icon-sizee"
+                                                    style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Correo</label><br>
+                                        <input class="input-form" type="email" name="email" maxlength="255"
+                                            minlength="6" required id="id_email">
+                                    </div>
+
+                                </div>
+                                <div class="inline fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="lock icon icon-sizee" style="margin-bottom: 28px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label-form">Contraseña</label><br>
+                                        <input class="input-form" type="text" name="password" value="ResidenteGE"
+                                            maxlength="255" minlength="6" required id="id_password">
+                                    </div>
+                                </div>
+                                <input type="checkbox" name="client" id="id_client">
+                                <input type="checkbox" name="supervisor_pdo" id="id_supervisor_pdo">
+                                <input type="checkbox" name="supervisor_ado" id="id_supervisor_ado">
+                                <input type="checkbox" name="employee" id="id_employee">
+                                <input type="checkbox" name="director" id="id_director">
+                                <input type="checkbox" name="management" id="id_management">
+                                <select name="position" id="id_position_create">
+                                    <option value="GE Costos">Costo</option>
+                                    <option value="GE Contabilidad">Contabilidad</option>
+                                    <option value="GE Tramitologia">Tramitologia</option>
+                                    <option value="GE Estimaciones">Estimaciones</option>
+                                    <option value="GE Compras">Compras</option>
+                                    <option value="GE Avance de Obra">Avance de Obra</option>
+                                    <option value="GE Programa de obra">Programa de obra</option>
+                                    <option value="GE Residente">Residente</option>
+                                    <option value="Supervisor Avance de obra">Supervisor Avance de obra</option>
+                                    <option value="Supervisor Programa de obra">Programa de obra</option>
+                                    <option value="Cliente">Cliente</option>
+                                    <option value="Director">Director</option>
+                                    <option value="Administrador">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ui tab" data-tab="tab-name2">
+                            <div class="ui form">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="dollar sign icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 5%;">Costos</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="cost" id="id_cost">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="archive icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 2%;">Contabilidad</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="accounting" id="id_accounting">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="file alternate outline icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Tramitología</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="tramitology" id="id_tramitology">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="calculator icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Estimaciones</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="estimation" id="id_estimation">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="shopping bag icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Compras</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="shopping" id="id_shopping">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="calendar alternate outline icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Avance de
+                                                        obra</span> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="construction_advance"
+                                                id="id_construction_advance">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field" style="padding-left: 0px;">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="clipboard list icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Programa de
+                                                        obra</span> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="construction_program"
+                                                id="id_construction_program">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="briefcase icon icon-sizee"></i>
+                                                <div class="content"><span style="margin-left: 4%;">Residente</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="resident" id="id_resident">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex;">
+                            <button class="medium ui button bt-update" style="margin: auto;"
+                                id="add_user">GUARDAR</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+    </div>
+
+</div>
+<!-- ---------------------------------------------------------------------------------------------------- -->
+<!------------------------------------ Eliminar usuarios ------------------------------------------------ -->
+<div id="delete_m" class="ui mini modal" >
+    <div class="header">Header</div>
+    <div class="content">
+        <p>Desea eliminar este ususario </p>
+    </div>
+    <div class="actions">
+        <div class="ui red cancel inverted button">
+            <i class="remove icon"></i>
+            No
+        </div>
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+<!-- --------------------------------------------------------------------------------------------------- -->
+{% endblock%}
+{% block scripts %}
+<script>
+    $('#id_client').hide()
+    $('#id_supervisor_pdo').hide()
+    $('#id_supervisor_ado').hide()
+    $('#id_employee').hide();
+    $('#id_director').hide();
+    $('#card-error').hide();
+    $('#id_management').hide();
+    $('#id_position_create').hide()
+    $('.tabular.menu .item').tab();
+    $('#data').hide();
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    $('.ui.dropdown.select').dropdown();
+
+    $(function () {
+        $('#select_prueb').dropdown({
+            onChange: function (text, value) {
+                $('#id_cost').prop('checked', false);
+                $('#id_accounting').prop('checked', false);
+                $('#id_tramitology').prop('checked', false);
+                $('#id_estimation').prop('checked', false);
+                $('#id_shopping').prop('checked', false);
+                $('#id_construction_advance').prop('checked', false);
+                $('#id_construction_program').prop('checked', false);
+                $('#id_resident').prop('checked', false);
+                $('#id_supervisor_ado').prop('checked', false);
+                $('#id_supervisor_pdo').prop('checked', false);
+                $('#id_client').prop('checked', false);
+                $('#id_director').prop('checked', false);
+                $('#id_management').prop('checked', false);
+                $('#data').fadeIn("slow");
+                validador(parseInt(text));
+            },
+            showOnFocus:false
+        });
+    });
+</script>
+<script>
+    function validador(select) {
+        if (select == 1) { $("#id_position_create").val("GE Costos"); $('#id_cost').prop('checked', true); }
+        if (select == 2) { $("#id_position_create").val("GE Contabilidad"); $('#id_accounting').prop('checked', true); }
+        if (select == 3) { $("#id_position_create").val("GE Tramitologia"); $('#id_tramitology').prop('checked', true); }
+        if (select == 4) { $("#id_position_create").val("GE Estimaciones"); $('#id_estimation').prop('checked', true); }
+        if (select == 5) { $("#id_position_create").val("GE Compras"); $('#id_shopping').prop('checked', true); }
+        if (select == 6) { $("#id_position_create").val("GE Avance de Obra"); $('#id_construction_advance').prop('checked', true); }
+        if (select == 7) { $("#id_position_create").val("GE Programa de obra"); $('#id_construction_program').prop('checked', true); }
+        if (select == 8) { $("#id_position_create").val("GE Residente"); $('#id_resident').prop('checked', true); }
+        if (select == 9) { $("#id_position_create").val("Supervisor Avance de obra"); $('#id_supervisor_ado').prop('checked', true); }
+        if (select == 10) { $("#id_position_create").val("Supervisor Programa de obra"); $('#id_supervisor_pdo').prop('checked', true); }
+        if (select == 11) { $("#id_position_create").val("Cliente"); $('#id_client').prop('checked', true); }
+        if (select == 12) { $("#id_position_create").val("Director"); $('#id_director').prop('checked', true); }
+        if (select == 13) { $("#id_position_create").val("Administrador"); $('#id_management').prop('checked', true); }
+
+
+        if (select > 8) {
+            $('#tab-rol').hide()
+        } else {
+            $('#tab-rol').show()
+        }
+        if (select < 9) {
+            $('#id_employee').prop('checked', true);
+        } else {
+            $('#id_employee').prop('checked', false);
+        }
+    }
+    function abrir_modal() {
+        $('#popup').modal({closable: false}).modal('show');
+        $('#data').hide()
+    }
+    function deleteUser(pk) {
+        $('#delete_m').modal({
+            closable: false,
+            onDeny: function () {
+            },
+            onApprove: function () {
+                delete_user(pk)
+            }
+        }).modal('show')
+    }
+    function delete_user(pk) {
+        let url = '{% url 'user_create_list' %}' + pk 
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Eliminando usuario............'
+                });
+
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            window.location.reload();
+            console.log(error)
+        })
+    }
+    $('#add_user').click(function (event) {
+        event.preventDefault();
+        var extension
+        if ($('#id_ext').val()) {
+            extension = $('#id_ext').val()
+        } else {
+            extension = 0
+        }
+        var user = {
+
+            'userRol': {
+                'position': $('#id_position_create').val(),
+                'cost': $('#id_cost').prop('checked'),
+                'accounting': $('#id_accounting').prop('checked'),
+                'tramitology': $('#id_tramitology').prop('checked'),
+                'estimation': $('#id_estimation').prop('checked'),
+                'shopping': $('#id_shopping').prop('checked'),
+                'construction_advance': $('#id_construction_advance').prop('checked'),
+                'construction_program': $('#id_construction_program').prop('checked'),
+                'resident': $('#id_resident').prop('checked'),
+            },
+            'userPerson': {
+                'client': $('#id_client').prop('checked'),
+                'supervisor_pdo': $('#id_supervisor_pdo').prop('checked'),
+                'supervisor_ado': $('#id_supervisor_ado').prop('checked'),
+                'employee': $('#id_employee').prop('checked'),
+                'director': $('#id_director').prop('checked'),
+                'management': $('#id_management').prop('checked'),
+            },
+            'first_name': $('#id_first_name').val(),
+            'last_name': $('#id_last_name').val(),
+            'email': $('#id_email').val(),
+            'username': $('#id_email').val(),
+            'password': $('#id_password').val(),
+            'phone_number': $('#id_phone_number').val(),
+            'ext': extension,
+            'mobile_number': $('#id_mobile_number').val()
+        }
+        $.ajax({
+            url: $('#form_user').attr('data-url'),
+            type: 'POST',
+            data: JSON.stringify(user),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Creando usuario...'
+                });
+
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+
+        }).fail(function (error) {
+            $.unblockUI();
+            $('#errors_list').html('')
+            if (error.responseJSON) {
+                $.each(error.responseJSON, function(index, value) {
+                    $('#errors_list').append('<li>' + index + ': ' + value + '</li>')
+                })
+                $('#card-error').show()
+                if(error.responseJSON.email) {  $('#id_email').addClass('error-input-border') } else { $('#id_email').removeClass('error-input-border') }
+                if(error.responseJSON.mobile_number) {$('#id_mobile_number').addClass('error-input-border')} else { $('#id_mobile_number').removeClass('error-input-border') }
+            } else {
+                console.log(error)
+                $('#card-error').show()
+            }
+            $('#card-error').show()
+        
+        })
+    })
+    function update_user_api(pk) {
+        option = $('#select-data_' + pk).val()
+        var user_update = {
+            'first_name': $('#first_name_update_' + pk).val(),
+            'last_name': $('#last_name_update_' + pk).val(),
+            'phone_number': $('#phone_number_update_' + pk).val(),
+            'ext': $('#ext_update_' + pk).val(),
+            'mobile_number': $('#mobile_number_update_' + pk).val(),
+            'userRol': {
+                'position': option,
+                'cost': $('#cost_update_' + pk).prop('checked'),
+                'accounting': $('#accounting_update_' + pk).prop('checked'),
+                'tramitology': $('#tramitology_update_' + pk).prop('checked'),
+                'estimation': $('#estimation_update_' + pk).prop('checked'),
+                'shopping': $('#shopping_update_' + pk).prop('checked'),
+                'construction_advance': $('#construction_advance_update_' + pk).prop('checked'),
+                'construction_program': $('#construction_program_update_' + pk).prop('checked'),
+                'resident': $('#resident_update_' + pk).prop('checked'),
+            },
+            'userPerson': {
+                'employee': $('#employee_' + pk).prop('checked')
+            }
+        }
+        $.ajax({
+            url: '{% url 'user_create_list' %}' + pk + '/',
+            type: 'PATCH',
+            data: JSON.stringify(user_update),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Actualizando usuario...'
+                });
+
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            console.log(done)
+            window.location.reload();
+
+        }).fail(function (error) {
+            $.unblockUI();
+            alert(error)
+        });
+    }
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function roles(pk){
+        $('#rol_modal_' + pk).modal('show');
+    }
+
+</script>
+{% endblock %}

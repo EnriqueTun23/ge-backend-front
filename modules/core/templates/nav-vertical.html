@@ -1,0 +1,172 @@
+{% load static %}
+<!-------------------------------------- menu ------------------------------------------->
+<!-- <nav id="ejemplo" class="effect-menu"> -->
+<div class="effect-menu-container">
+    <i id="icon-hide-effect" onclick="EfectMenuHideShow()" class="caret left icon effect-menu-container-caret"></i>
+</div>
+
+{% if user.is_staff %}
+<div class="btn-admi">
+    <ul>
+        <li class="eliminar {% if request.path == '/ge/users/list/' %} btn-admin-active {% endif %} "><a
+                {% if request.path == '/ge/users/list/' %} href="#" {% endif %}" href="{% url 'userList' %}"> <i
+                    class="users icon icon-hidden"></i> <span class="hidden-menu">USUARIOS</span></a></li>
+        <li class="eliminar {% if request.path == '/ge/projects/list/' %} btn-admin-active {% endif %}"><a
+                {% if request.path == '/ge/projects/list/' %} href="#" {% endif %} href="{% url 'projectList' %}"><i
+                    class="wrench icon icon-hidden"></i> <span class="hidden-menu">PROYECTOS</span></a></li>
+        <li class="eliminar {% if request.path == '/ge/clients/list/' %} btn-admin-active {% endif %}"" ><a
+                            {% if request.path == '/ge/clients/list/' %} href=" #" {% endif %}
+            href="{% url 'clientList' %}"><i class="handshake outline icon icon-hidden"></i>
+            <span class="hidden-menu">CLIENTES</span></a></li>
+        <li class=" {% if request.path == '/ge/' %} btn-admin-active {% endif %}"><a {% if request.path == '/ge/' %}
+                href="#" {% endif %} href="{% url 'home' %}"> <i class="tachometer alternate icon icon-hidden"></i>
+                <span class="hidden-menu">DASHBOARD</span></a></li>
+    </ul>
+</div>
+<div style="margin-top: 8%">
+    <hr class="vertical-hr" id="separator">
+</div>
+
+<div class="hidde-show-admin icon-hidden" onclick="HideMenu()">
+    <i id="icon-effect" class="caret up icon icons-effects" style="font-size: 16px;"></i>
+    <span class="icons-effects-data">Menos</span>
+</div>
+{% elif user.userPerson.management %}
+<div class="">
+    <ul>
+        <li class="eliminar {% if request.path == '/ge/users/list/' %} btn-admin-active {% endif %} "><a
+                {% if request.path == '/ge/users/list/' %} href="#" {% endif %}" href="{% url 'userList' %}"> <i
+                    class="users icon"></i> <span class="hidden-menu">USUARIOS</span></a></li>
+        <li class="eliminar {% if request.path == '/ge/projects/list/' %} btn-admin-active {% endif %}"><a
+                {% if request.path == '/ge/projects/list/' %} href="#" {% endif %} href="{% url 'projectList' %}"><i
+                    class="wrench icon"></i> <span class="hidden-menu">PROYECTOS</span></a></li>
+        <li class="eliminar {% if request.path == '/ge/clients/list/' %} btn-admin-active {% endif %}"" ><a
+                            {% if request.path == '/ge/clients/list/' %} href=" #" {% endif %}
+            href="{% url 'clientList' %}"><i class="handshake outline icon"></i>
+            <span class="hidden-menu">CLIENTES</span></a></li>
+        <li class=" {% if request.path == '/ge/' %} btn-admin-active {% endif %}"><a {% if request.path == '/ge/' %}
+                href="#" {% endif %} href="{% url 'home' %}"> <i class="tachometer alternate icon"></i> <span
+                    class="hidden-menu">DASHBOARD</span></a></li>
+    </ul>
+</div>
+<div class="" style="height: 1%;">
+    <hr class="vertical-hr" id="separator">
+</div>
+
+<div class="hidde-show-admin" onclick="HideMenu()">
+    <i id="icon-effect" class="caret up icon icons-effects" style="font-size: 16px;"></i>
+    <span class="icons-effects-data">Menos</span>
+</div>
+{% else %}
+<div class="btn-admi2">
+    <ul>
+        <li class=" {% if request.path == '/ge/' %} btn-admin-active {% endif %}"><a {% if request.path == '/ge/' %}
+                href="#" {% endif %} href="{% url 'home' %}"> <i class="tachometer alternate icon icon-hidden"></i>
+                <span class="hidden-menu">DASHBOARD</span></a></li>
+
+        {% if user.userRol.position == "GE Costos" %}
+        <li class="{% if request.path == '/ge/roles/costos/' %} btn-admin-active {% endif %}"><a 
+            {% if request.path == '/ge/roles/costos/' %} href="#" {% endif %}  href="{% url 'costo' %}"><i class="dollar sign icon"></i> <span class="hidden-menu">COSTOS</span></a>
+        </li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Contabilidad"  %}
+        <li class="{% if url == '/ge/roles/contabilidad/' %} btn-admin-active {% endif %}" ><a 
+            {% if request.path == '/ge/roles/contabilidad/' %} href="#" {% endif %} href="{% url 'contabilidad' %}">
+                <i class="archive icon"></i> <span class="hidden-menu icon-hidden">CONTABILIDAD</span></a></li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Tramitologia" %}
+        <li class="{% if url == '/ge/roles/tramitologia/' %} btn-admin-active {% endif %}"><a
+                {% if request.path == '/ge/roles/tramitologia/' %} href="#" {% endif %}
+                href="{% url 'tramitologia' %}"><i class="file alternate outline icon icon-hidden"></i> <span
+                    class="hidden-menu">TRÁMITES</span></a>
+        </li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Estimaciones" %}
+        <li class="{% if url == '/ge/roles/estimaciones/' %} btn-admin-active {% endif %}" ><a 
+            {% if request.path == '/ge/roles/estimaciones/' %} href="#" {% endif %} href="{% url 'estimaciones' %}">
+            <i class="calculator icon"></i> <span class="hidden-menu icon-hidden">ESTIMACIONES</span></a></li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Compras" %}
+        <li><a href="#"><i class="shopping bag icon"></i> <span class="hidden-menu icon-hidden">COMPRAS</span></a></li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Avance de Obra" %}
+        <li><a href="#"><i class="calendar alternate outline icon"></i> <span class="hidden-menu icon-hidden">AVANCE
+                    OBRA</span></a></li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Programa de obra" %}
+        <li class="{% if url == '/ge/roles/programaObra/' %} btn-admin-active {% endif %}" ><a 
+            {% if request.path == '/ge/roles/programaObra/' %} href="#" {% endif %} href="{% url 'programa_de_obra' %}"><i class="clipboard list icon"></i> <span class="hidden-menu icon-hidden">PROG.
+                    OBRA</span></a></li>
+        {% else %}
+        {% endif %}
+        {% if user.userRol.position == "GE Residente" %}
+        <li><a href="#"><i class="suitcase icon"></i> <span class="hidden-menu icon-hidden">RESIDENTE</span></a>
+        </li>
+        {% else %}
+        {% endif %}
+    </ul>
+</div>
+<div class="" style="height: 1%; margin-top: 20%">
+    <hr class="vertical-hr" id="separator">
+</div>
+{% endif %}
+<div class="btn-rol">
+    <ul class="" id="sub-menu">
+        {% if user.userRol.position == "GE Costos" %}
+        {% else %}
+        <li class="{% if request.path == '/ge/roles/costos/' %} btn-admin-active {% endif %}"><a 
+            {% if request.path == '/ge/roles/costos/' %} href="#" {% endif %}    href="{% url 'costo' %}"><i class="dollar sign icon icon-hidden"></i> <span class="hidden-menu ">COSTOS</span></a>
+        </li>
+        {% endif %}
+        {% if user.userRol.position == "GE Contabilidad"  %}
+        {% else %}
+        <li class="{% if url == '/ge/roles/contabilidad/' %} btn-admin-active {% endif %}"><a 
+            {% if request.path == '/ge/roles/contabilidad/' %} href="#" {% endif %} href="{% url 'contabilidad' %}">
+                <i class="archive icon icon-hidden"></i> <span class="hidden-menu">CONTABILIDAD</span></a></li>
+        {% endif %}
+        {% if user.userRol.position == "GE Tramitologia" %}
+        {% else %}
+        <li class="{% if url == '/ge/roles/tramitologia/' %} btn-admin-active {% endif %}"><a
+                {% if request.path == '/ge/roles/tramitologia/' %} href="#" {% endif %}
+                href="{% url 'tramitologia' %}"><i class="file alternate outline icon icon-hidden"></i> <span
+                    class="hidden-menu">TRÁMITES</span></a>
+        </li>
+        {% endif %}
+        {% if user.userRol.position == "GE Estimaciones" %}
+        {% else %}
+        <li class="{% if url == '/ge/roles/estimaciones/' %} btn-admin-active {% endif %}">
+            <a {% if request.path == '/ge/roles/estimaciones/' %} href="#" {% endif %} href="{% url 'estimaciones' %}"><i class="calculator icon icon-hidden"></i> <span class="hidden-menu">ESTIMACIONES</span></a>
+        </li>
+        {% endif %}
+        {% if user.userRol.position == "GE Compras" %}
+        {% else %}
+        <li><a href="#"><i class="shopping bag icon icon-hidden"></i> <span class="hidden-menu">COMPRAS</span></a></li>
+        {% endif %}
+        {% if user.userRol.position == "GE Avance de Obra" %}
+        {% else %}
+        <li><a href="#"><i class="calendar alternate outline icon icon-hidden"></i> <span class="hidden-menu">AVANCE
+                    OBRA</span></a></li>
+        {% endif %}
+        {% if user.userRol.position == "GE Programa de obra" %}
+        {% else %}
+        <li class="{% if url == '/ge/roles/programaObra/' %} btn-admin-active {% endif %}"><a 
+            {% if request.path == '/ge/roles/programaObra/' %} href="#" {% endif %} href="{% url 'programa_de_obra' %}"><i class="clipboard list icon icon-hidden"></i> <span class="hidden-menu">PROG.
+                    OBRA</span></a></li>
+        {% endif %}
+        {% if user.userRol.position == "GE Residente" %}
+        {% else %}
+        <li><a href="#"><i class="suitcase icon icon-hidden"></i> <span class="hidden-menu">RESIDENTE</span></a>
+        </li>
+        {% endif %}
+        <li><a href="#"><i class="address book outline icon icon-hidden"></i> <span style="margin-bottom: 0px"
+                    class="hidden-menu">CONTACTOS</span></a></li>
+    </ul>
+</div>
+<!-- </nav> -->
+<!-- --------------------------------------------------------------------------------- -->

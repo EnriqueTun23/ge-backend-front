@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Login</title>
+{% endblock head_content %}
+
+{% block container %}
+
+
+{% if  form.username.errors  %}
+  <p>email fallido</p>
+{% endif %}
+<section class="reset-password-done-section" id="barrahiden">
+    <div>
+        <p> <b>El restablecimiento de la contraseña fue realizado.</b></p>
+        <p>La contraseña estas lista para usarse. Puede acceder ahora.</p>
+    </div>
+</section>
+<section class="login">
+    <article class="login-container">
+        <div class="card-login">
+            <div class="card-login-logo">
+                <img src="{% static 'img/LogotipoGE.png' %}">
+            </div>
+            <div class="card-login-title">
+                <h1 id="welcome-title" class="login-title">
+                    BIENVENIDO
+                </h1>
+                {% if form.non_field_errors %}
+                    <p toggle="#welcome-title" class="error-global">Introduzca un email y contraseña correctas.</p>
+                {% endif %}
+            </div>
+            <div class="card-login-container">
+                <form action="" method="POST" id="login_form">{% csrf_token %}
+                    <input id="email-login" type="email" 
+                    placeholder="Correo electrónico" 
+                    name="username" 
+                    onKeyDown="validatorEmail();" 
+                    onKeyUp="validatorEmail();" 
+                    onkeypress="validatorEmail();" required>
+                    <p toggle="#email-login" id="error-email" class="error-input">
+                    </p>
+                    <input id="password-field" type="password" placeholder="Contraseña" name="password" required>
+                    <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" id="check-password"></span>
+                    <button id="login" >INICIAR SESIÓN</button>
+                </form>
+                <p class="card-login-container-p">
+                  <a href="{% url 'reset_password' %}">¿Olvidaste tu contraseña?</a>
+                </p>
+            </div>
+        </div>
+    </article>
+</section>
+
+{% endblock%}
+
+{% block scripts %}
+<!-- validator -->
+<script>
+    
+    data = "{{parametro}}"
+    if (data == 1) {
+    $("#barrahiden").show();
+    } else {
+    $("#barrahiden").hide();
+    }
+</script>
+<script src="{% static 'js/validator-input.js' %}"></script>
+{% endblock%}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block container %}
+        <div class="error-card-token" style="padding: 40px; background-color: #eeeeee;">
+            <div style="background-color: white; padding: 40px;">    
+               
+                <img src="{{site}}{% static 'img/LogotipoGE.png' %}">
+                <h3>Hola {{ user.first_name }}, </h3>
+                <p>Para poder iniciar sesión en la App de GE Construcciones debes
+                validar tu correo, posteriormente recibirás un mail de confirmación.
+                </p>
+                <p>Da click al siguiente link:</p>
+                <a href="{% if protocol %}https{% else %}http{% endif %}://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Validar email</a>
+                <br><br>
+                <hr>
+                <h4>
+                    ¿Tiene problemas? 
+                </h4>
+                
+                <p>
+                    Si necesita más ayuda reenvía este mail o escribenos a <b>ayuda@gecontrucciones.com</b>
+                </p>
+            </div>
+        </div>
+{% endblock %}

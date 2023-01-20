@@ -1,0 +1,34 @@
+{% load static %}
+{% block statics_files %}
+
+{% endblock %}
+<div id="menu"  style="box-shadow:0px 2px 6px rgba(0,0,0,.5); height:  6%;">
+    <header>
+        <div class="logo" id="logo-normal">
+            <img src="{% static 'img/simboloGE.png' %}" alt="">
+        </div>
+        <div id="logo-menu" class="logo">
+            <i class="bars icon" ></i>
+        </div>
+        <div class="division"></div>
+        <div style="width: 92%;"></div>
+        <div class="settings submenu">
+            <div class="division" style="width: 1px;"></div>
+            <a id="hover-user" class="user-menu hover-plus" href="#">
+                <div> k</div>
+                <i class="sort down icon" style="font-size: 13px;  margin-bottom: 12px;  margin-left: 12px;"></i>
+            </a>
+            <ul class="children children-effect-inicial">
+                <li class="children-icon" style="border-bottom: 1px #C9C6C6 solid;">
+                    <a href="#"><i class="user icon"></i> Mi perfil</a>
+                </li>
+                <li class="children-icon" style="border-bottom: 1px #C9C6C6 solid;">
+                    <a href="#"><i class="cog icon"></i>Configuración</a>
+                </li>
+                <li class="children-icon">
+                    <a href="{% url 'logout' %}"><i class="unlock icon"></i>Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+</div>

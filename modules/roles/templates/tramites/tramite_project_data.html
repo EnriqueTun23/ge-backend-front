@@ -1,0 +1,4574 @@
+{% extends "base_roles.html" %}
+{% load static %}
+
+{% block breadcrumb %}
+<div class="ui breadcrumb" style="margin-top: 25px; margin-left: 2.5%; ">
+  <a href="{% url 'tramitologia' %}" class="section">Proyecto</a>
+  <i class="right angle icon divider"></i>
+  <a class="section">{{nombre}}</a>
+
+  <i class="right angle icon divider"></i>
+</div>
+{% endblock %}
+
+{% block header %}
+<!-- header desktop -->
+<table id="table_desktop" class="ui basic table">
+  <thead>
+    <tr>
+      <td colspan="7">
+        <a onclick="modal_seccion()" class="ui labeled icon button btn-seccion">
+          <i class="plus icon" style="font-size: 16px !important;"></i>
+          AGREGAR SECCIÓN
+        </a>
+      </td>
+      <td colspan="3" class="right aligned">
+        <form method='GET'>
+          <div class="ui action input">
+            <input id="input_search" type="text" placeholder="Buscar...">
+            <div id="search" class="ui button">Buscar</div>
+          </div>
+        </form>
+      </td>
+    </tr>
+    <tr style="font-size: 14px;">
+      <th style="width: 5%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;">Reordenar</th>
+      <th style="width: 5%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;">Autorización</th>
+      <th style="width: 24%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6; " class="center aligned">Trámite</th>
+      <th style="width: 18%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;" class="center aligned">Progreso</th>
+      <th style="width: 13%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;" class="center aligned">Ingreso</th>
+      <th style="width: 13%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;" class="center aligned">Vigencia</th>
+      <th style="width: 9%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;" class="center aligned">Costo </th>
+      <th style="width: 8%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;" class="center aligned">Estatus</th>
+      <th style="width: 3%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;">Archivo </th>
+      <th style="width: 3%; padding-left: 0 !important; padding-right:0 !important; color: #C9C6C6;">Eliminar</th>
+    </tr>
+    
+  </thead>
+</table>
+<!-- table mobil -->
+
+<div id="table_movil" style="width: 90%; height: 100%; display: flex; justify-content: space-around; align-items: center; flex-flow: row nowrap;">
+  <div style="width: 45%">
+    <a onclick="modal_seccion_responsive()" class="ui labeled icon button btn-seccion" style="min-height: 100%; padding-top: 5%; padding-left: 2.5em !important; padding-right: 0em !important;">
+      <i class="plus icon" style="font-size: 14px !important;"></i>
+      AGREGAR SECCIÓN
+    </a>
+  </div>
+  
+  <div class="ui action input" style="width: 50%; height: 65%;">
+    <input id="input_search_responsive" type="text" placeholder="Search...">
+    <div id="search_responsive" class="ui icon button">
+      <i class="search icon"></i>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block section_actualizacion %}
+<!-- modal seccion -->
+<div id="id_seccion" class="ui tiny longer modal" style="height: 55% !important;">
+  <i class="close icon"></i>
+  <div class="header" style="height: 11%; border-bottom: none; padding-bottom: 0;">
+    <h3>Sección</h3>
+  </div>
+  <div class="scrolling content" style="max-height: calc(83%); height: 83% !important; padding-top: 0.4em;">
+    <span id="success-table">Al seleccionar las siguientes secciones, se mostrarán los trámites que las integran.</span>
+    <span style="color: red;" id="error-table">Deseleccionando "Factibilidades" no se mostrarán los trámites
+      correspondientes.</span>
+      <div class="ui form" style="margin-top: 20px;">
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_PRELIMINARES" checked>
+            <label for="check_PRELIMINARES" style="padding-left: 40px; color:#77777A; cursor:pointer;">Preliminares</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_FACTIBILIDADES"  checked>
+            <label for="check_FACTIBILIDADES" style="padding-left: 40px; color:#77777A; cursor:pointer; cursor:pointer;">Factibilidades</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_ESTUDIOS" checked>
+            <label for="check_ESTUDIOS" style="padding-left: 40px; color:#77777A; cursor:pointer;">Estudios</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_DIR">
+            <label for="check_DIR" style="padding-left: 40px; color:#77777A; cursor:pointer;">Trámites ante Dir, Des, Urb, Mpal.</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_MUNICIPALES">
+            <label for="check_MUNICIPALES" style="padding-left: 40px; color:#77777A; cursor:pointer;">Trámites ante Dependencias Municipales</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_ESTATALES">
+            <label for="check_ESTATALES" style="padding-left: 40px; color:#77777A; cursor:pointer;">Trámites ante Dependencias Estatales</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_FEDERALES">
+            <label for='check_FEDERALES' style="padding-left: 40px; color:#77777A; cursor:pointer;">Trámites ante Dependencias Federales</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_CONDICIONATES">
+            <label for="check_CONDICIONATES" style="padding-left:  40px; color:#77777A; cursor:pointer;">Seguimiento de Condicionates</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_SEGUIMIENTO" name="example">
+            <label style="padding-left: 40px; color:#77777A; cursor:pointer;" for="check_SEGUIMIENTO">Seguimiento de Condicionates Estatales o
+              Federales</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_CFE_DONACION" name="example">
+            <label for="check_CFE_DONACION" style="padding-left: 40px; color:#77777A; cursor:pointer;">CFE Obras en Donación</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_CATASTRO" name="example">
+            <label for="check_CATASTRO" style="padding-left: 40px; color:#77777A; cursor:pointer;">Catastro</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px;  cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_CFE" name="example">
+            <label for="check_CFE" style="padding-left: 40px; color:#77777A; cursor:pointer;">CFE</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px;  cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_JAPAY" name="example">
+            <label for="check_JAPAY" style="padding-left: 40px; color:#77777A; cursor:pointer;">JAPAY</label>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom: 8px; cursor:pointer;">
+          <div class="ui checkbox">
+            <input type="checkbox" id="check_ARBOREA" name="example">
+            <label for="check_ARBOREA" style="padding-left: 40px; color:#77777A; cursor:pointer;">Autorizaciones y tramites ante ARBOREA</label>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="actions" style="padding: 2% 0 2% 0 !important;">
+    <div class="ui button" style="background-color:transparent; color: transparent; cursor: default;">ACTUALIZAR TRÁMITES</div>
+   </div>
+</div>
+
+<!-- PRELIMINARES	 -->
+<table id="table_preliminares" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Preliminares', 'myTable_preliminar', 'myTable_preliminar_responsive', 'lateral_preliminares_', 'example', 'text_preliminares_', 'text_Preliminares')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Preliminares
+      </th>
+    </tr>
+    <tr id="text_Preliminares">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_preliminar" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;" data-tramite-id="1">
+      <td style="border-left: 3px  #00CF61 solid; width: 5%;" id="lateral_preliminares_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">2456123</td>
+      <td style="width: 26%; padding-left: 0 !important">Prospección Arqueologica y Oficio de Liberación del INAH,
+        en caso de no haber vestigios</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="100" id="example2" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" value="2019-07-22" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" value="2020-01-22" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input type="text" onload="LoadCosto($(this))" class="costos" value="4200.00" style="padding-left: 17px !important;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_preliminares_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- FACTIBILIDADES -->
+<table id="table_factibilidades" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Factibilidades', 'myTable_factibilidades', 'myTable_factibilidades_responsive', 'lateral_factibilidad_', 'process_factibilidad_', 'text_factibilidad_', 'text_Factibilidades')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Factibilidades
+      </th>
+    </tr>
+    <tr id="text_Factibilidades">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_factibilidades" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;" data-tramite-id="2">
+      <td style="border-left: 3px  #00CF61 solid; width: 5%;" id="lateral_preliminares_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">56</td>
+      <td class="valor_data" style="width: 26%; padding-left: 0 !important">Factibilidad de Uso de Suelo FUS</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="100" id="process_factibilidad_1" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input type="text" onload="LoadCosto($(this))" class="costos" value="0" style="padding-left: 17px !important;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;" data-tramite-id="3">
+      <td style="border-left: 3px  #00CF61 solid; width: 5%;" id="lateral_preliminares_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">24</td>
+      <td class="valor_data" style="width: 26%; padding-left: 0 !important">Factibilidad Urbana Ambiental FUA</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="100" id="process_factibilidad_2" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input type="text" onload="LoadCosto($(this))" class="costos" value="0" style="padding-left: 17px !important;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;" data-tramite-id="4">
+      <td style="border-left: 3px  #00CF61 solid; width: 5%;" id="lateral_preliminares_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">22</td>
+      <td class="valor_data" style="width: 26%; padding-left: 0 !important">Factibilidad de servicios de agua potable</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="100" id="process_factibilidad_3" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))"  style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input type="text" class="costos"  onload="LoadCosto($(this))" value="0" style="padding-left: 17px !important;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_3">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- ESTUDIOS -->
+<table id="table_estudios" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Estudios', 'myTable_estudios', 'myTable_estudios_responsive', 'lateral_estudios_', 'process_estudio_', 'text_estudios_', 'text_Estudios')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Estudios
+      </th>
+    </tr>
+    <tr id="text_Estudios">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_estudios" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;" data-tramite-id="7">
+      <td style="border-left: 3px  #00CF61 solid; width: 5%;" id="lateral_estudios_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">2123</td>
+      <td style="width: 26%; padding-left: 0 !important">Estudio de impacto Urbano</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="100" id="process_estudio_1" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input type="text" class="costos" onload="LoadCosto($(this))" value="0.00" style="padding-left: 17px !important;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estudios_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- TRÁMITES ANTE DIR, DES, URB, MPAL. -->
+<table id="table_tra" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="3" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dir, Des, Urb, Mpal.', 'myTable_dir', 'myTable_dir_responsive', 'lateral_dir_', 'process_dir_', 'text_dir_', 'text_Dir')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dir, Des, Urb, Mpal.
+      </th>
+    </tr>
+    <tr id="text_Dir">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_dir" class="filas-search">
+    
+  </tbody>
+</table>
+
+<!-- TRÁMITES ANTE DEPENDENCIAS MUNICIPALES -->
+<table id="table_municipales" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias Municipales', 'myTable_municipal', 'myTable_municipal_responsive', 'lateral_municipal_', 'process_municipal_', 'text_municipal_', 'text_Municipales')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Municipales
+      </th>
+    </tr>
+    <tr id="text_Municipales">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_municipal" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- TRÁMITES ANTE DEPENDENCIAS ESTATALES	 -->
+<table id="table_estatales" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias Estatales', 'myTable_estatal', 'myTable_estatal_responsive', 'lateral_estatal_', 'process_estatal_', 'text_estatal_', 'text_Estatales')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Estatales
+      </th>
+    </tr>
+    <tr id="text_Estatales">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_estatal" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- tramites ante dependencias federales -->
+<table id="table_federales" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias ', 'myTable_federal', 'myTable_federal_responsive', 'lateral_federal_', 'process_federal_', 'text_federal_', 'text_Federales')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Federales
+      </th>
+    </tr>
+    <tr id="text_Federales">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_federal" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- SEGUIMIENTO DE CONDICIONATES -->
+<table id="table_condicionales" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Seguimiento de Condicionates', 'myTable_seguimiento', 'myTable_seguimiento_responsive', 'lateral_seguimiento_', 'process_seguimiento_', 'text_seguimiento_', 'text_Condicionates')" 
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Seguimiento de Condicionates
+      </th>
+    </tr>
+    <tr id="text_Condicionates">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_seguimiento" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- Seguimiento de Condicionates Estatales o Federales -->
+<table id="table_seguimiento" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Seguimiento de Condicionates Estatales o Federales', 'myTable_seguimiento_condi', 'myTable_seguimiento_condi_responsive', 'lateral_seguimiento_condi_', 'process_seguimiento_condi_', 'text_seguimiento_condi_', 'text_Seguimiento')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Seguimiento de Condicionates Estatales o Federales
+      </th>
+    </tr>
+    <tr id="text_Seguimiento">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_seguimiento_condi" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- CFE Obras en Donación -->
+<table id="table_donacion_cfe" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('CFE Obras en Donación', 'myTable_donacion', 'myTable_donacion_responsive', 'lateral_donacion_', 'process_donacion_', 'text_donacion_', 'text_Donación')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        CFE Obras en Donación
+      </th>
+    </tr>
+    <tr id="text_Donación">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_donacion" class="filas-search">
+  </tbody>
+</table>
+<!-- Catastro -->
+<table id="table_catastro" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Catastro', 'myTable_catastro', 'myTable_catastro_responsive', 'lateral_catastro_', 'process_catastro_', 'text_catastro_', 'text_Catastro')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Catastro
+      </th>
+    </tr>
+    <tr id="text_Catastro">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_catastro" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- CFE -->
+<table id="table_cfe" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('CFE', 'myTable_cfe', 'myTable_cfe_responsive', 'lateral_cfe_', 'process_cfe_', 'text_cfe_', 'text_CFE')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        CFE
+      </th>
+    </tr>
+    <tr id="text_CFE">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_cfe" class="filas-search">
+   
+  </tbody>
+</table>
+<!-- JAPAY -->
+<table id="table_japay" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('JAPAY', 'myTable_japay', 'myTable_japay_responsive', 'lateral_japay_', 'process_japay_', 'text_japay_', 'text_JAPAY')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        JAPAY
+      </th>
+    </tr>
+    <tr id="text_JAPAY">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_japay" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- Autorizaciones y tramites ante ARBOREA -->
+<table id="table_arborea" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="10" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Autorizaciones y tramites ante ARBOREA', 'myTable_arborea', 'myTable_arborea_responsive', 'lateral_arborea_', 'process_arborea_', 'text_arborea_', 'text_ARBOREA')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Autorizaciones y tramites ante ARBOREA
+      </th>
+    </tr>
+    <tr id="text_ARBOREA">
+      <th class="center aligned" colspan="10">
+        <span style="color: #707070; font-weight: normal;  font-style:italic;">Esta sección aún no tiene trámites</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid;" id="myTable_arborea" class="filas-search">
+    
+  </tbody>
+</table>
+
+<!-------------------------------- agregar tramites ------------------------------------------------------------->
+<div id="tramite_create" class="ui tiny longer modal" style="height: 55% !important;">
+  <i class="close icon"></i>
+  <div class="header" style="height: 25%; border-bottom: none; padding-bottom: 0;">
+    <h3 id="title-tramite" style="margin-bottom: 1%;">Trámites</h3>
+    <div class="ui icon fluid input" style="margin-bottom: 1%;">
+      <input class="prompt" type="text" style="padding: 10px 12px !important; font-size: 14px;"
+        id="input_search_tramite" onkeyup="search_tramite()" placeholder="Buscar...">
+      <i class="search icon icon icon-tramitologia"></i>
+    </div>
+    <div>
+      <p id="error_delete_tramite" style="color: red; font-size: 14px; font-weight: 200;"></p>
+    </div>
+  </div>
+  <div class="scrolling content" style="max-height: calc(65%); height: 65% !important; padding-top: 0.2em"> 
+    <!-- <span id="error_delete_tramite" style="color: red; font-size: 14px; font-weight: 200;"></span> -->
+    <div class="ui form" id="list-tramite">
+
+    </div>
+    <div class="ui grid" id="text-tramite">
+      <div class="sixteen wide column">
+      <span style="color: #55565A; font-size: 14px;">Agregar trámite:</span><br>
+      <span style="color: #55565A; font-size: 14px;" id="text-cambiante"></span>
+      </div>
+    </div>
+    <div class="ui grid" id="button-tramite">
+      <div class="four wide column"></div>
+      <div class="seven wide column">
+        <div>
+          <div class="fluid ui button ok" id="add_tramite_personalizado"
+            style="background-color:#FFC600; color: white; cursor: pointer;">
+            AGREGAR TRÁMITE
+          </div>
+        </div>
+      </div>
+      <div class="four wide column "></div>
+    </div>
+ 
+</div>
+<div class="actions" style="padding: 2% 0 2% 0 !important;">
+  <div class="ui approve button" style="background-color:#FFC600; color: white; cursor: pointer;" id="id_ok_tramite">ACTUALIZAR TRÁMITES</div>
+ </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block section_actualizacion_mobil %}
+<!-- modal seccion -->
+<div id="id_seccion_responsive" class="ui tiny longer modal">
+  <i class="close icon"></i>
+  <div class="header">
+    <h3>Sección</h3>
+  </div>
+  <div class="scrolling content">
+    <span id="success-table_responsive">Al seleccionar las siguientes secciones, se mostrarán los trámites que las integran.</span>
+    <span style="color: red;" id="error-table_responsive">Deseleccionando "Factibilidade" no se mostrarán los trámites
+      correspondientes.</span>
+    <div class="form-user" style="margin-left: 5%; margin-top: 10%">
+      <div class="ui grid">
+        <div class="fourteen wide column">
+          <div class="ui form">
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+                    <div class="content"><span style="color: #77777A;">Preliminares</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_PRELIMINARES_responsive" checked name="" value="">
+                  <label for="check_PRELIMINARES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+                    <div class="content"><span style="color: #77777A;">Factibilidades</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_FACTIBILIDADES_responsive" checked name="" value="">
+                  <label for="check_FACTIBILIDADES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+                    <div class="content"><span style="color: #77777A;">Estudios</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_ESTUDIOS_responsive" checked name="" value="">
+                  <label for="check_ESTUDIOS_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Trámites ante Dir, Des, Urb, Mpal.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_DIR_responsive" checked name="" value="">
+                  <label for="check_DIR_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Trámites ante Dependencias Municipales</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_MUNICIPALES_responsive" checked name="" value="">
+                  <label for="check_MUNICIPALES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Trámites ante Dependencias Estatales</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_ESTATALES_responsive" checked name="" value="">
+                  <label for="check_ESTATALES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Trámites ante Dependencias Federales</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_FEDERALES_responsive" checked name="" value="">
+                  <label for="check_FEDERALES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Seguimiento de Condicionates </span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_CONDICIONATES_responsive" checked name="" value="">
+                  <label for="check_CONDICIONATES_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Seguimiento de Condicionates Estatales o
+                        Federales</span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_SEGUIMIENTO_responsive" name="" value="">
+                  <label for="check_SEGUIMIENTO_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">CFE Obras en Donación</span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_CFE_DONACION_responsive" name="" value="">
+                  <label for="check_CFE_DONACION_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Catastro</span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_CATASTRO_responsive" name="" value="">
+                  <label for="check_CATASTRO_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">CFE</span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_CFE_responsive" name="" value="">
+                  <label for="check_CFE_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">JAPAY</span> </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_JAPAY_responsive" name="" value="">
+                  <label for="check_JAPAY_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field" style="width: 70% !important;">
+                <div class="ui list">
+                  <div class="item">
+
+                    <div class="content"><span style="color: #77777A;">Autorizaciones y tramites ante ARBOREA</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field" style="width: 10% !important; margin-left: 20% !important;">
+                <div class="checkbox">
+                  <input type="checkbox" id="check_ARBOREA_responsive" name="" value="">
+                  <label for="check_ARBOREA_responsive"><span></span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- PRELIMINARES	 -->
+<table id="table_preliminares_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Preliminares', 'myTable_preliminar', 'myTable_preliminar_responsive', 'lateral_preliminares_', 'example', 'text_preliminares_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        PRELIMINARES
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_preliminar_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_preliminares_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_preliminares_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Prospección Arqueologica y Oficio de Liberación del INAH, en caso de no haber vestigios</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="example2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- FACTIBILIDADES -->
+<table id="table_factibilidades_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Factibilidades', 'myTable_factibilidades', 'myTable_factibilidades_responsive', 'lateral_factibilidad_', 'process_factibilidad_', 'text_factibilidad_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Factibilidades
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_factibilidades_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_factibilidad_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Factibilidad de Uso de Suelo FUS</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_factibilidad_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_factibilidad_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_2">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>223</td>
+      <td>Factibilidad Urbana Ambiental FUA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_factibilidad_2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_factibilidad_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_3">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2423</td>
+      <td>Factibilidad de servicios de agua potable</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_factibilidad_3" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_factibilidad_4">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_factibilidad_4">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>6123</td>
+      <td>Factibilidad de servicio de energía eléctrica</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_factibilidad_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<!-- ESTUDIOS -->
+<table id="table_estudios_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Estudios', 'myTable_estudios', 'myTable_estudios_responsive', 'lateral_estudios_', 'process_estudio_', 'text_estudios_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Estudios
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_estudios_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estudios_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estudios_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>123</td>
+      <td>Estudio de impacto Urbano</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estudio_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estudios_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estudios_2">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>123</td>
+      <td>Estudio de impacto Urbano</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estudio_2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estudios_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estudios_3">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>223</td>
+      <td>Manifestación de Impacto Ambiental</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estudio_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estudios_4">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FFC600;" id="text_estudios_4">
+            En trámite
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>513</td>
+      <td>Plan de Manejo de Residuos de Manejor Especial</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="50" id="process_estudio_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- TRÁMITES ANTE DIR, DES, URB, MPAL. -->
+<table id="table_tra_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dir, Des, Urb, Mpal.', 'myTable_dir', 'myTable_dir_responsive', 'lateral_dir_', 'process_dir_', 'text_dir_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dir, Des, Urb, Mpal.
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_dir_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_dir_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Licencia de uso de suelo para construccion</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_dir_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_dir_2">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Autorizacion de trabajos preliminares</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_dir_2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_dir_3">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Licencia para Construccion</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_dir_3" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_4">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_dir_4">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2423</td>
+      <td>Permiso de Anuncio denominativo Adosado a Fachada</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_dir_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_5">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_dir_5">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Constancia de Recepcion de Sistema de tratamiento de Aguas
+        Residuales</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_dir_5" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_dir_6">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="text_dir_6">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>123</td>
+      <td>Constancia de terminacion de obra </td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="0" id="process_dir_6" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- TRÁMITES ANTE DEPENDENCIAS MUNICIPALES -->
+<table id="table_municipales_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias Municipales', 'myTable_municipal', 'myTable_municipal_responsive', 'lateral_municipal_', 'process_municipal_', 'text_municipal_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Municipales
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_municipal_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_municipal_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_municipal_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Autorizacion de proyecto de ampliacion de red de agua
+        potable</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_municipal_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- TRÁMITES ANTE DEPENDENCIAS ESTATALES	 -->
+<table id="table_estatales_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias Estatales', 'myTable_estatal', 'myTable_estatal_responsive', 'lateral_estatal_', 'process_estatal_', 'text_estatal_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Estatales
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_estatal_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2523</td>
+      <td>Dictamen de Riesgo del Inmueble</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_2">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>221</td>
+      <td>Autorización de Impacto Ambiental</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_3">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>333</td>
+      <td>Autorizacion de Plan de Manejo Residuos Especiales</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_3" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_4">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_4">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>123</td>
+      <td>Dictamen Inicial de Impacto Vial (Autorizacion)</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_5">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_5">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>229</td>
+      <td>Dictamen Final de Impacto Vial (Recepcion)</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_5" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_estatal_6">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_estatal_6">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>223</td>
+      <td>Acta de Recepcion de Dispositivos de Seguridad</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_estatal_6" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- tramites ante dependencias federales -->
+<table id="table_federales_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Trámites ante Dependencias ', 'myTable_federal', 'myTable_federal_responsive', 'lateral_federal_', 'process_federal_', 'text_federal_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Trámites ante Dependencias Federales
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_federal_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_federal_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FFC600;" id="text_federal_1">
+            En trámite
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>999123</td>
+      <td>Permiso de Descarga de Aguas Residuales (Pozo de descarga
+        PTAR)</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_federal_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- SEGUIMIENTO DE CONDICIONATES -->
+<table id="table_condicionales_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Seguimiento de Condicionates', 'myTable_seguimiento', 'myTable_seguimiento_responsive', 'lateral_seguimiento_', 'process_seguimiento_', 'text_seguimiento_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Seguimiento de Condicionates
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_seguimiento_responsive" class="filas-search">
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_seguimiento_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_seguimiento_1">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>123</td>
+      <td>Aviso de inicio de obra SEDUMA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">example2
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_seguimiento_1" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_seguimiento_2">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #00CF61;" id="text_seguimiento_2">
+            Autorizado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2123123</td>
+      <td>Programa calanderizado SEDUMA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">example2
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_seguimiento_2" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_seguimiento_3">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="text_seguimiento_3">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>24</td>
+      <td>Informe de cumplimiento con Reporte Fotografico SEDUMA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">example2
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="100" id="process_seguimiento_3" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_seguimiento_4">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="text_seguimiento_4">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Supervición ambiental SEDUMA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">example2
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="0" id="process_seguimiento_4" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_seguimiento_5">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="text_seguimiento_5">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>2456123</td>
+      <td>Aviso de termino de obra y inicio de operación SEDUMA</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">example2
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="0" id="process_seguimiento_5" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- Seguimiento de Condicionates Estatales o Federales -->
+<table id="table_seguimiento_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Seguimiento de Condicionates Estatales o Federales', 'myTable_seguimiento_condi', 'myTable_seguimiento_condi_responsive', 'lateral_seguimiento_condi_', 'process_seguimiento_condi_', 'text_seguimiento_condi_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Seguimiento de Condicionates Estatales o Federales
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_seguimiento_condi_responsive" class="filas-search">
+   
+  </tbody>
+</table>
+<!-- CFE Obras en Donación -->
+<table id="table_donacion_cfe_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('CFE Obras en Donación', 'myTable_donacion', 'myTable_donacion_responsive', 'lateral_donacion_', 'process_donacion_', 'text_donacion_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        CFE Obras en Donación
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_donacion_responsive" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- Catastro -->
+<table id="table_catastro_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Catastro', 'myTable_catastro', 'myTable_catastro_responsive', 'lateral_catastro_', 'process_catastro_', 'text_catastro_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Catastro
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_catastro_responsive" class="filas-search">
+  </tbody>
+</table>
+<!-- CFE -->
+<table id="table_cfe_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('CFE', 'myTable_cfe', 'myTable_cfe_responsive', 'lateral_cfe_', 'process_cfe_', 'text_cfe_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        CFE
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_cfe_responsive" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- JAPAY -->
+<table id="table_japay_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('JAPAY', 'myTable_japay', 'myTable_japay_responsive', 'lateral_japay_', 'process_japay_', 'text_japay_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        PRELIMINARES
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_japay_responsive" class="filas-search">
+    
+  </tbody>
+</table>
+<!-- Autorizaciones y tramites ante ARBOREA -->
+<table id="table_arborea_responsive" class="ui celled  table" style=" margin-top: 3%;">
+  <thead>
+    <tr style="padding-top: 0; padding-bottom: 0;">
+      <th colspan="12" style="color: black; text-transform: uppercase;">
+        <a onclick="modal_tramite('Autorizaciones y tramites ante ARBOREA', 'myTable_arborea', 'myTable_arborea_responsive', 'lateral_arborea_', 'process_arborea_', 'text_arborea_')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </a>
+        Autorizaciones y tramites ante ARBOREA
+      </th>
+    </tr>
+  </thead>
+  <tbody style="border-right: 1px #cbc9c9 solid; border-left: 1px #cbc9c9 solid;" id="myTable_arborea_responsive" class="filas-search">
+    
+  </tbody>
+</table>
+{% endblock %}
+{%  block scripts_personalizade  %}
+<script>
+  var tabla_create;
+  var tabla_create_responsive
+  var lateral_create;
+  var progreso_create;
+  var text_create;
+  var text_table_no;
+  var id_create;
+  var aTramitesIds;
+  var miJson = {
+    "resultado": [
+      { "id": 1, "title": "Prospección Arqueologica y Oficio de Liberación del INAH, en caso de no haber vestigios" },
+      { "id": 2, "title": "Factibilidad de Uso de Suelo FUS" },
+      { "id": 3, "title": "Factibilidad Urbana Ambiental FUA" },
+      { "id": 4, "title": "Factibilidad de servicios de agua potable" },
+      { "id": 6, "title": "Factibilidad de servicio de energía eléctrica" },
+      { "id": 7, "title": "Estudio de impacto Urbano" },
+      { "id": 8, "title": "Manifestación de Impacto Ambiental" },
+      { "id": 9, "title": "Plan de Manejo de Residuos de Manejor Especial" },
+      { "id": 10, "title": "Licencia de uso de suelo para construccion" },
+      { "id": 11, "title": "Autorizacion de trabajos preliminares" },
+      { "id": 12, "title": "Licencia para Construccion" },
+      { "id": 13, "title": "Constancia de Recepcion de Sistema de tratamiento de Aguas Residuales" },
+      { "id": 14, "title": "Constancia de terminacion de Obra" },
+      { "id": 15, "title": "Autorizacion de proyecto de ampliacion de red de agua potable" },
+      { "id": 16, "title": "Dictamen de Riesgo del Inmueble" },
+      { "id": 17, "title": "Autorización de Impacto Ambiental" },
+      { "id": 18, "title": "Autorizacion de Plan de Manejo Residuos Especiales" },
+      { "id": 19, "title": "Dictamen Inicial de Impacto Vial (Autorizacion)" },
+      { "id": 20, "title": "Acta de Recepcion de Dispositivos de Seguridad" },
+      { "id": 21, "title": "Permiso de Descarga de Aguas Residuales (Pozo de descarga PTAR)" },
+      { "id": 22, "title": "Avisio de inicio de obra SEDUMA" },
+      { "id": 23, "title": "Programa calanderizado SEDUMA" },
+      { "id": 24, "title": "Informe de cumplimiento con Reporte Fotografico SEDUMA" },
+      { "id": 25, "title": "Supervición ambiental SEDUMA" },
+      { "id": 26, "title": "Aviso de termino de obra y inicio de operación SEDUMA" }
+    ]
+  }
+  cargarif()
+  $(function () {
+        $('.costos').trigger('onload');
+        $('.calendar_tramite').trigger('onload');
+  });
+  // cargarifREsponsive()
+  $('#error_delete_tramite').hide();
+  $('#button-tramite').hide();
+  $('#text-tramite').hide();
+  $('#error-table').hide();
+  $('#button-tramite_responsive').hide();
+  $('#text-tramite_responsive').hide();
+  $('#error-table_responsive').hide();
+  // checkeds desktop
+  $('#check_PRELIMINARES').click(function () {
+    if ($('#myTable_preliminar > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Preliminares" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_preliminares').show();
+      } else {
+        $('#table_preliminares').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_preliminares').show();
+      } else {
+        $('#table_preliminares').hide();
+      }
+    }
+  });
+  $('#check_FACTIBILIDADES').click(function () {
+    if ($('#myTable_factibilidades > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Factibilidades" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_factibilidades').show();
+      } else {
+        $('#table_factibilidades').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_factibilidades').show();
+      } else {
+        $('#table_factibilidades').hide();
+      }
+    }
+  });
+  $('#check_ESTUDIOS').click(function () {
+    if ($('#myTable_estudios > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Estudios" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_estudios').show();
+      } else {
+        $('#table_estudios').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_estudios').show();
+      } else {
+        $('#table_estudios').hide();
+      }
+    }
+  });
+  $('#check_DIR').click(function () {
+    if ($('#myTable_dir > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Trámites ante Dir, Des, Urb, Mpal." no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_tra').show();
+      } else {
+        $('#table_tra').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_tra').show();
+      } else {
+        $('#table_tra').hide();
+      }
+    }
+  });
+  $('#check_MUNICIPALES').click(function () {
+    if ($('#myTable_municipal > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Trámites ante Dependencias Municipales" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_municipales').show();
+      } else {
+        $('#table_municipales').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_municipales').show();
+      } else {
+        $('#table_municipales').hide();
+      }
+    }
+  });
+  $('#check_ESTATALES').click(function () {
+    if ($('#myTable_estatal > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Trámites ante Dependencias Estatales" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_estatales').show();
+      } else {
+        $('#table_estatales').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_estatales').show();
+      } else {
+        $('#table_estatales').hide();
+      }
+    }
+  });
+  $('#check_FEDERALES').click(function () {
+    if ($('#myTable_federal > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Trámites ante Dependencias Federales" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_federales').show();
+      } else {
+        $('#table_federales').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_federales').show();
+      } else {
+        $('#table_federales').hide();
+      }
+    }
+  });
+  $('#check_CONDICIONATES').click(function () {
+    if ($('#myTable_seguimiento > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Seguimiento de Condicionates" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_condicionales').show();
+      } else {
+        $('#table_condicionales').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_condicionales').show();
+      } else {
+        $('#table_condicionales').hide();
+      }
+    }
+  });
+  $('#check_SEGUIMIENTO').click(function () {
+    if ($('#myTable_seguimiento_condi > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Seguimiento de Condicionates Estatales o Federales" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_seguimiento').show();
+      } else {
+        $('#table_seguimiento').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_seguimiento').show();
+      } else {
+        $('#table_seguimiento').hide();
+      }
+    }
+  });
+  $('#check_CFE_DONACION').click(function () {
+    if ($('#myTable_donacion > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "CFE Obras en Donación" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_donacion_cfe').show();
+      } else {
+        $('#table_donacion_cfe').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_donacion_cfe').show();
+      } else {
+        $('#table_donacion_cfe').hide();
+      }
+    }
+  });
+  $('#check_CATASTRO').click(function () {
+    if ($('#myTable_catastro > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Catastro" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_catastro').show();
+      } else {
+        $('#table_catastro').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_catastro').show();
+      } else {
+        $('#table_catastro').hide();
+      }
+    }
+  });
+  $('#check_CFE').click(function () {
+    if ($('#myTable_cfe > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "CFE" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_cfe').show();
+      } else {
+        $('#table_cfe').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_cfe').show();
+      } else {
+        $('#table_cfe').hide();
+      }
+    }
+  });
+  $('#check_JAPAY').click(function () {
+    if ($('#myTable_japay > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "JAPAY" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_japay').show();
+      } else {
+        $('#table_japay').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_japay').show();
+      } else {
+        $('#table_japay').hide();
+      }
+    }
+  });
+  $('#check_ARBOREA').click(function () {
+    if ($('#myTable_arborea > tr').length > 0) {
+      $('#success-table').hide()
+      $('#error-table').text('Deseleccionando la sección "Autorizaciones y tramites ante ARBOREA" no se mostrarán los trámites correspondientes.')
+      $('#error-table').show()
+      if ($(this).is(':checked')) {
+        $('#table_arborea').show();
+      } else {
+        $('#table_arborea').hide();
+      }
+    } else {
+      $('#success-table').show()
+      $('#error-table').hide()
+      if ($(this).is(':checked')) {
+        $('#table_arborea').show();
+      } else {
+        $('#table_arborea').hide();
+      }
+    }
+  });
+  // checkeds movil
+  $('#check_PRELIMINARES_responsive').click(function () {
+    if ($('#myTable_preliminar_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Preliminares" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_preliminares_responsive').show();
+      } else {
+        $('#table_preliminares_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_preliminares_responsive').show();
+      } else {
+        $('#table_preliminares_responsive').hide();
+      }
+    }
+  });
+  $('#check_FACTIBILIDADES_responsive').click(function () {
+    if ($('#myTable_factibilidades_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Factibilidades" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_factibilidades_responsive').show();
+      } else {
+        $('#table_factibilidades_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_factibilidades_responsive').show();
+      } else {
+        $('#table_factibilidades_responsive').hide();
+      }
+    }
+  });
+  $('#check_ESTUDIOS_responsive').click(function () {
+    if ($('#myTable_estudios_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Estudios" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_estudios_responsive').show();
+      } else {
+        $('#table_estudios_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_estudios_responsive').show();
+      } else {
+        $('#table_estudios_responsive').hide();
+      }
+    }
+  });
+  $('#check_DIR_responsive').click(function () {
+    if ($('#myTable_dir_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Trámites ante Dir, Des, Urb, Mpal." no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_tra_responsive').show();
+      } else {
+        $('#table_tra_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_tra_responsive').show();
+      } else {
+        $('#table_tra_responsive').hide();
+      }
+    }
+  });
+  $('#check_MUNICIPALES_responsive').click(function () {
+    if ($('#myTable_municipal_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Trámites ante Dependencias Municipales" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_municipales_responsive').show();
+      } else {
+        $('#table_municipales_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_municipales_responsive').show();
+      } else {
+        $('#table_municipales_responsive').hide();
+      }
+    }
+  });
+  $('#check_ESTATALES_responsive').click(function () {
+    if ($('#myTable_estatal_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Trámites ante Dependencias Estatales" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_estatales_responsive').show();
+      } else {
+        $('#table_estatales_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_estatales_responsive').show();
+      } else {
+        $('#table_estatales_responsive').hide();
+      }
+    }
+  });
+  $('#check_FEDERALES_responsive').click(function () {
+    if ($('#myTable_federal_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Trámites ante Dependencias Federales" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_federales_responsive').show();
+      } else {
+        $('#table_federales_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_federales_responsive').show();
+      } else {
+        $('#table_federales_responsive').hide();
+      }
+    }
+  });
+  $('#check_CONDICIONATES_responsive').click(function () {
+    if ($('#myTable_seguimiento_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Seguimiento de Condicionates" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_condicionales_responsive').show();
+      } else {
+        $('#table_condicionales_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_condicionales_responsive').show();
+      } else {
+        $('#table_condicionales_responsive').hide();
+      }
+    }
+  });
+  $('#check_SEGUIMIENTO_responsive').click(function () {
+    if ($('#myTable_seguimiento_condi_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Seguimiento de Condicionates Estatales o Federales" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_seguimiento_responsive').show();
+      } else {
+        $('#table_seguimiento_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_seguimiento_responsive').show();
+      } else {
+        $('#table_seguimiento_responsive').hide();
+      }
+    }
+  });
+  $('#check_CFE_DONACION_responsive').click(function () {
+    if ($('#myTable_donacion_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "CFE Obras en Donación" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_donacion_cfe_responsive').show();
+      } else {
+        $('#table_donacion_cfe_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_donacion_cfe_responsive').show();
+      } else {
+        $('#table_donacion_cfe_responsive').hide();
+      }
+    }
+  });
+  $('#check_CATASTRO_responsive').click(function () {
+    if ($('#myTable_catastro_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Catastro" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_catastro_responsive').show();
+      } else {
+        $('#table_catastro_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_catastro_responsive').show();
+      } else {
+        $('#table_catastro_responsive').hide();
+      }
+    }
+  });
+  $('#check_CFE_responsive').click(function () {
+    if ($('#myTable_cfe_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "CFE" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_cfe_responsive').show();
+      } else {
+        $('#table_cfe_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_cfe_responsive').show();
+      } else {
+        $('#table_cfe_responsive').hide();
+      }
+    }
+  });
+  $('#check_JAPAY_responsive').click(function () {
+    if ($('#myTable_japay_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "JAPAY" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_japay_responsive').show();
+      } else {
+        $('#table_japay_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_japay_responsive').show();
+      } else {
+        $('#table_japay_responsive').hide();
+      }
+    }
+  });
+  $('#check_ARBOREA_responsive').click(function () {
+    if ($('#myTable_arborea_responsive > tr').length > 0) {
+      $('#success-table_responsive').hide()
+      $('#error-table_responsive').text('Deseleccionando "Autorizaciones y tramites ante ARBOREA" no se mostraran los trámites correspondientes.')
+      $('#error-table_responsive').show()
+      if ($(this).is(':checked')) {
+        $('#table_arborea_responsive').show();
+      } else {
+        $('#table_arborea_responsive').hide();
+      }
+    } else {
+      $('#success-table_responsive').show()
+      $('#error-table_responsive').hide()
+      if ($(this).is(':checked')) {
+        $('#table_arborea_responsive').show();
+      } else {
+        $('#table_arborea_responsive').hide();
+      }
+    }
+  });
+
+  
+  $("table tbody").sortable({
+    handle: '.arrows',
+    axis: 'y',
+    cancel: ''
+  }).disableSelection();
+  
+  function LoadCosto(event) {
+    if (event.val() == 0 ) {
+      event.val('0.00')
+      event.css('color', '#C9C6C6');
+      event.next().css('color', '#C9C6C6');
+    } else {
+      event.css('color', '#77777A')
+      event.next().css('color', '#77777A')
+      event.val(function(index, value){
+        return value
+        .replace(/\D/g, "")
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+      }); 
+    }
+  }
+  $('.costos').keyup(function(event) {   
+    $(this).val(function(index, value) {
+    return value
+      .replace(/\b(0(?!\b))+/g, "") 
+      .replace(/\D/g, "")
+      .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+      .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+    });
+  });
+  $('.costos').blur(function() {
+    
+    if(!$(this).val()) {
+      $(this).val('0.00') 
+      $(this).css('color', '#C9C6C6')
+      $(this).next().css('color', '#C9C6C6')
+    } else {
+      
+      $(this).css('color', '#77777A')
+      $(this).next().css('color', '#77777A')
+    }
+  });
+  $('.calendar_tramite').blur(function() {
+    if(!$(this).val()) {
+      $(this).css('color', '#C9C6C6')
+      $(this).next().css('color', '#C9C6C6')
+    } else {
+      $(this).css('color', '#77777A')
+      $(this).next().css('color', '#77777A')
+    }
+    
+  })
+  
+  function LoadCalendar(event) {
+    if(!event.val()) {
+      event.css('color', '#C9C6C6');
+      event.next().css('color', '#C9C6C6');
+    } else {
+      event.css('color', '#77777A')
+      event.next().css('color', '#77777A')
+    }
+  }
+     
+  function modal_seccion() {
+    $('#id_seccion').modal({ closable: false }).modal('show');
+  }
+
+  function modal_seccion_responsive() {
+    $('#id_seccion_responsive').modal({ closable: false }).modal('show');
+  }
+  function load_tramite() {
+    let aTramites =  $('#'+tabla_create+ ' > tr ').toArray()
+
+    aTramitesIds = aTramites.map(function(oTr){
+		  return $(oTr).data("tramite-id");
+	  });
+    $.each( miJson.resultado, function(key, valor) {
+      var isSelect = aTramitesIds.find(function (item) {
+        return item === valor.id
+      })
+      if(!isSelect) {
+        var lista = `
+        <div class="fields fields-list">
+        
+          <div class="fifteen wide field" style="margin-bottom: 8px; cursor:pointer;">
+              <div class="ui checkbox checkbox_tramites">
+                <input class="checkbox_tramites_che" type="checkbox" id="check_tramite_${valor.id}" data-tramite-id="${valor.id}">
+                <label for="check_tramite_${valor.id}" style="padding-left: 40px; color:#77777A; cursor:pointer; font-weight: normal;">${valor.title} </label>
+                
+              </div>
+          </div>
+          <div class="one wide field" style="cursor:pointer;">
+            <i class="trash icon trash_list"></i>
+          </div>
+        </div> 
+              
+              `
+      
+        $(lista).appendTo('#list-tramite');
+      } else {
+        var lista = ` 
+        <div class="fields fields-list">  
+          <div class=" fifteen wide field" style="margin-bottom: 8px; cursor:pointer;">
+              <div class="ui checkbox checkbox_tramites">
+                <input class="checkbox_tramites_che" type="checkbox" id="check_tramite_${valor.id}" data-tramite-id="${valor.id}" checked>
+                <label for="check_tramite_${valor.id}" style="padding-left: 40px; color:#FFC600; cursor:pointer; font-weight: bold;">${valor.title} </label>
+              </div>
+              
+          </div> 
+          <div class="one wide field" style="cursor:pointer;">
+            <i class="trash icon  trash_list"></i>
+          </div>
+        </div>    
+            `
+      
+        $(lista).appendTo('#list-tramite');
+        
+      }
+      $('.trash_list').hide();
+      $('.fields-list').hover(function() {
+        $(this).children('.one.wide.field').children('.trash_list').show()
+        $(this).css('background-color', 'rgba(85, 86, 90, .1)')
+        
+      }, function() {
+        $(this).children('.one.wide.field').children('.trash_list').hide()
+        $(this).css('background-color', 'transparent')
+      })
+      $('.trash_list').click(function() {
+        
+        $(this).parent().parent().remove()
+      })
+    })
+    
+    load_click() 
+  }
+  function load_click() {
+    $('.checkbox_tramites_che').click(function() {
+      if($(this).is(':checked')){ $(this).next('label').css({'color' : '#FFC600', 'font-weight': 'bold'})} else { $(this).next('label').css({'color' : '#77777A', 'font-weight' : 'normal'}) }
+      var array = $('.checkbox_tramites > .checkbox_tramites_che').toArray()
+      let checker = []
+      $.each(array, function(ix, oTr){
+        if($(oTr).is(':checked')) {
+          checker.push(oTr)
+        } 
+	    });
+      let TramitesNuevos = checker.map(function(oTr){
+		    return $(oTr).data("tramite-id");
+	    });
+      alertTramitesPorEliminarDeSeccion(aTramitesIds, TramitesNuevos)
+    })
+  }
+
+  function search_tramite() {
+    var search = $('#input_search_tramite').val().toUpperCase()
+    $('#text-cambiante').text($('#input_search_tramite').val());
+    if (search.length > 0) {
+      $('#list-tramite').show()
+      var filter_resultado = $(miJson.resultado).filter(function (i, n) { return !n.title.toUpperCase().indexOf(search) });
+      if (filter_resultado.length > 0) {
+        $('#button-tramite').hide();
+        $('#text-tramite').hide();
+        $('#id_ok_tramite').show();
+        $('#list-tramite').html('')
+        $.each(filter_resultado, function(key, valor) {
+          var isSelect = aTramitesIds.find(function (item) {
+            return item === valor.id
+          })
+
+          if(!isSelect) {
+              var lista = ` <div class="fields fields-list">
+        
+        <div class="fifteen wide field" style="margin-bottom: 8px; cursor:pointer;">
+            <div class="ui checkbox checkbox_tramites">
+              <input class="checkbox_tramites_che" type="checkbox" id="check_tramite_${valor.id}" data-tramite-id="${valor.id}">
+              <label for="check_tramite_${valor.id}" style="padding-left: 40px; color:#77777A; cursor:pointer; font-weight: normal;">${valor.title} </label>
+              
+            </div>
+        </div>
+        <div class="one wide field" style="cursor:pointer;">
+          <i class="trash icon trash_list"></i>
+        </div>
+      </div> `
+            $(lista).appendTo('#list-tramite');
+          } else {
+            var lista = ` <div class="fields fields-list">  
+          <div class=" fifteen wide field" style="margin-bottom: 8px; cursor:pointer;">
+              <div class="ui checkbox checkbox_tramites">
+                <input class="checkbox_tramites_che" type="checkbox" id="check_tramite_${valor.id}" data-tramite-id="${valor.id}" checked>
+                <label for="check_tramite_${valor.id}" style="padding-left: 40px; color:#FFC600; cursor:pointer; font-weight: bold;">${valor.title} </label>
+              </div>
+              
+          </div> 
+          <div class="one wide field" style="cursor:pointer;">
+            <i class="trash icon  trash_list"></i>
+          </div>
+        </div>  `
+          $(lista).appendTo('#list-tramite');
+          }
+          $('.trash_list').hide();
+          $('.fields-list').hover(function() {
+            $(this).children('.one.wide.field').children('.trash_list').show()
+            $(this).css('background-color', 'rgba(85, 86, 90, .1)')
+          }, function() {
+            $(this).children('.one.wide.field').children('.trash_list').hide()
+            $(this).css('background-color', 'transparent')
+          });
+          $('.trash_list').click(function() {
+            $(this).parent().parent().remove()
+          });
+        })
+      } else {
+        $('#text-tramite').show();
+        $('#button-tramite').show();
+        $('#id_ok_tramite').hide();
+        $('#list-tramite').hide();
+      }
+    } else {
+      $('#text-tramite').hide();
+      $('#button-tramite').hide();
+      $('#id_ok_tramite').show();
+      $('#list-tramite').html('')
+      load_tramite()
+    }
+
+
+  }
+  function modal_tramite(seccion, table, table_responsive, lateral, progreso, text, text_no) {
+    $('#error_delete_tramite').hide()
+    $('#input_search_tramite').val('')
+    $('#title-tramite').text(seccion)
+    $('#tramite_create').modal({ closable: false }).modal('show');
+    tabla_create = table
+    tabla_create_responsive = table_responsive
+    lateral_create = lateral
+    progreso_create = progreso
+    text_create = text
+    text_table_no = text_no
+    var search = $('#input_search_tramite').val().toUpperCase()
+    $('#list-tramite').html('')
+    load_tramite()
+    
+  }
+
+  function add_table_tramite(titulo, id_data_tramite) {
+    var fecha = new Date();
+    var id = Date.parse(fecha)
+      var tr_add = `
+      <tr style="color: #77777A; font-size: 14px;" data-tramite-id="${id_data_tramite}">
+      <td style="border-left: 3px  #FE0919 solid; width: 5%;" id="${lateral_create}${id}">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 5%;">${id}</td>
+      <td style="width: 26%; padding-left: 0 !important">${titulo}</td>
+      <td style="width: 15%;">
+        <div class="ui indicating fluid progress" data-percent="0" id="${progreso_create}${id}" style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+            <div class="ui fluid left icon transparent input">
+              <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+              <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+            </div>
+      </td>
+      <td style="width: 13%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="calendar_tramite" type="date" onload="LoadCalendar($(this))" style="color: #77777A; padding-left: 17px !important;" >
+          <i class="calendar icon icon-tramitologia" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style="width: 9%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui fluid left icon transparent input">
+          <input class="costos" onload="LoadCosto($(this))" value="0.00" style="padding-left: 17px !important; color: #77777A;" >
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+        
+      </td>
+      <td style=" width: 8%; padding-left: 0 !important; padding-right: 0 !important;">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="${text_create}${id}">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 3%;" class="center aligned">
+        <i class="file alternate outline icon icon-tramitologia"></i>
+      </td>
+      <td style="width: 3%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+      `
+
+      var tr_add_responsive = ` checkbox_tramites_che
+      <tr style="color: #77777A; font-size: 14px;">
+      <td class="" id="lateral_preliminares_1">
+        <i class="arrows alternate icon icon-tramitologia"></i>
+      </td>
+      <td class="center aligned">
+        <div class="ui inline dropdown">
+          <div class="text" style="color: #FE0919;" id="${text_create}${id}">
+            Ingresado
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #00CF61;">
+              Autorizado
+            </div>
+            <div class="item" style="color: #FFC600;">
+              En trámite
+            </div>
+            <div class="item" style="color: #FE0919;">
+              Ingresado
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>${id}</td>
+      <td>${titulo}</td>
+      <td>
+        <div class="ui form">
+          <div class="field">
+            <div class="two field">
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui icon input">
+                  <input type="date">
+                  <i class="calendar icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>  
+      <td style="margin-bottom: 10px; margin-top: 10px;">
+        <i class="file alternate outline icon icon-tramitologia"></i> <span>$ 7000.00</span>
+      </td>
+      <td style="padding-left: 8% !important;">
+        <div class="ui indicating progress" data-percent="0" id="${progreso_create}${id}" style="max-width: 94%">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+          <div class="label proceso-label">
+            <div class="proceso-label-container">
+              <div class="proceso-left">
+                <i class="minus icon"></i>
+              </div>
+              <div class="proceso-right">
+                <i class="plus icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+      `
+      $(tr_add).appendTo('#' + tabla_create);
+      $('.costos').trigger('onload');
+      $('.calendar_tramite').trigger('onload');
+      $('.costos').keyup(function(event) {   
+    $(this).val(function(index, value) {
+    return value
+      .replace(/\D/g, "")
+      .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+      .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+    });
+  });
+  $('.costos').blur(function() {
+    
+    if(!$(this).val()) {
+      $(this).val(0.00) 
+      $(this).css('color', '#C9C6C6')
+      $(this).next().css('color', '#C9C6C6')
+    } else {
+      
+      $(this).css('color', '#77777A')
+      $(this).next().css('color', '#77777A')
+    }
+  });
+  $('.calendar_tramite').blur(function() {
+    if(!$(this).val()) {
+      $(this).css('color', '#C9C6C6')
+      $(this).next().css('color', '#C9C6C6')
+    } else {
+      $(this).css('color', '#77777A')
+      $(this).next().css('color', '#77777A')
+    }
+    
+  })
+  
+      // $(tr_add_responsive).appendTo('#' + tabla_create_responsive)
+  }
+  $('#add_tramite_personalizado').click(function () {
+    var title = $('#input_search_tramite').val()
+    var fecha = new Date();
+    var id_create2 = Date.parse(fecha)
+    var lista = `
+          <div class="fields fields-list">  
+          <div class=" fifteen wide field" style="margin-bottom: 8px; cursor:pointer;">
+              <div class="ui checkbox checkbox_tramites">
+                <input class="checkbox_tramites_che" type="checkbox" id="check_tramite_${id_create2}" data-tramite-id="${id_create2}" checked>
+                <label for="check_tramite_${id_create2}" style="padding-left: 40px; color:#FFC600; cursor:pointer; font-weight: bold;">${title} </label>
+              </div>
+              
+          </div> 
+          <div class="one wide field" style="cursor:pointer;">
+            <i class="trash icon  trash_list"></i>
+          </div>
+        </div>
+          
+          
+          `
+    $('#text-tramite').hide();
+    $('#button-tramite').hide();
+    $('#list-tramite').show()
+    $('#id_ok_tramite').show();
+    $('#list-tramite').html('')
+    $(lista).appendTo('#list-tramite');
+    $.when(load_tramite()).then(function(){  
+      miJson.resultado.push({ "id": id_create2, "title": title })
+    })
+    $('.trash_list').hide();
+          $('.fields-list').hover(function() {
+            $(this).children('.one.wide.field').children('.trash_list').show()
+            $(this).css('background-color', 'rgba(85, 86, 90, .1)')
+          }, function() {
+            $(this).children('.one.wide.field').children('.trash_list').hide()
+            $(this).css('background-color', 'transparent')
+          })     
+  });
+  $('.trash_list').click(function() {
+        
+        $(this).parent().parent().remove()
+  });
+  $('#id_ok_tramite').click(function ()  { 
+    $('.checkbox_tramites > .checkbox_tramites_che').each(function(index){
+      if($(this)[0].checked) {
+        $('#'+text_table_no).hide()
+        
+        var data_set = $(this)[0].dataset.tramiteId;
+        var isSelect = aTramitesIds.find(function (item) {
+          return item == data_set
+        })
+        if(!isSelect) {
+          add_table_tramite($(this).parent().children()[1].innerText, $(this).parent().children()[0].dataset.tramiteId)    
+        }
+
+      } 
+    });
+    eliminarTRSiExiste();
+    $('.ui.inline.dropdown').dropdown();
+    $('.ui.indicating.progress').progress();
+    $(".minus").click(function () { 
+      $($(this).parent().parent().parent().parent()).progress('decrement', 10);
+    });
+    $(".plus").click(function () {
+      $($(this).parent().parent().parent().parent()).progress('increment', 10, 100);
+    });
+    $(".icon.trash").click(function() {
+    $(this).parent().parent().remove()
+  })
+    $('.ui.inline.dropdown').click(function () {
+      if ($(this).children()[0].innerText === 'Ingresado') {
+        $($(this).parent().parent()[0].cells[0]).css({
+          'border-left': '3px  #FE0919 solid',
+          'width': '5%'
+        })
+        $($(this).children()[0]).css({
+          'color': '#FE0919'
+        })
+      } else if ($(this).children()[0].innerText === 'Autorizado') {
+        $($(this).parent().parent()[0].cells[0]).css({
+          'border-left': '3px  #00CF61 solid',
+          'width': '5%'
+        })
+        $($(this).children()[0]).css({
+          'color': '#00CF61'
+        })
+      } else {
+        $($(this).parent().parent()[0].cells[0]).css({
+          'border-left': '3px  #FFC600 solid',
+          'width': '5%'
+        })
+        $($(this).children()[0]).css({
+          'color': '#FFC600'
+        })
+      }
+    })
+    
+  });
+
+  $('.ui.inline.dropdown').click(function () {
+
+    if ($(this).children()[0].innerText === 'Ingresado') {
+      $($(this).parent().parent()[0].cells[0]).css({
+        'border-left': '3px  #FE0919 solid',
+        'width': '5%'
+      })
+      $($(this).children()[0]).css({
+        'color': '#FE0919'
+      })
+    } else if ($(this).children()[0].innerText === 'Autorizado') {
+      $($(this).parent().parent()[0].cells[0]).css({
+        'border-left': '3px  #00CF61 solid',
+        'width': '5%'
+      })
+      $($(this).children()[0]).css({
+        'color': '#00CF61'
+      })
+    } else {
+      $($(this).parent().parent()[0].cells[0]).css({
+        'border-left': '3px  #FFC600 solid',
+        'width': '5%'
+      })
+      $($(this).children()[0]).css({
+        'color': '#FFC600'
+      })
+    }
+  })
+  $('#search').click(function () {
+    var txtValue
+    var search = $('#input_search').val().toUpperCase();
+    var filas = $('.filas-search tr')
+
+    for (let i = 0; i < filas.length; i++) {
+      var td = filas[i].getElementsByTagName('td')[2];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+
+        if (txtValue.toUpperCase().indexOf(search) > -1) {
+          filas[i].style.display = "";
+        } else {
+          filas[i].style.display = "none";
+        }
+      }
+    }
+
+  });
+  $(".minus").click(function () {
+    $($(this).parent().parent().parent().parent()).progress('decrement', 10);
+  });
+  $(".plus").click(function () {
+    $($(this).parent().parent().parent().parent()).progress('increment', 10, 100);
+  });
+  $(".icon.trash").click(function() {
+    $(this).parent().parent().remove()
+  })
+
+  function alertTramitesPorEliminarDeSeccion(aTramitesOriginales, aNuevosTramites){
+	
+	let aDiferencia = aTramitesOriginales.filter(tramite => !aNuevosTramites.includes(tramite));
+  if(aDiferencia.length > 0){
+    $('#error_delete_tramite').show()
+    $.each(aDiferencia,function(ix, oTr) {
+     miJson.resultado.find(function(items) {
+       if (items.id === oTr) {
+        $('#error_delete_tramite').text('se eliminaran los trámites con el nombre de: ' + items.title )
+       }
+     })
+    })
+    // $('#error_delete_tramite').text('se eliminaran los tramites con id:' + aDiferencia )
+  } else {
+    $('#error_delete_tramite').hide()
+  }
+}text_CFE
+
+  function eliminarTRSiExiste() {
+    var array = $('.checkbox_tramites > .checkbox_tramites_che').toArray()
+      let checker = []
+      $.each(array, function(ix, oTr){
+        if($(oTr).is(':checked')) {
+          checker.push(oTr)
+        } 
+	    });
+      let TramitesNuevos = checker.map(function(oTr){
+		    return $(oTr).data("tramite-id");
+	    });
+      
+      let aDiferencia = aTramitesIds.filter(tramite => !TramitesNuevos.includes(tramite));
+      if(aDiferencia.length > 0){
+        var table_remove  =  $('#' + tabla_create +' > tr').toArray();
+        $.each(table_remove, function(index, data){
+          aDiferencia.find(function (item) {
+            if(item == $(data).data("tramite-id")) {
+              $(data).remove()
+            }
+          })
+        })
+      }
+  }
+
+
+  function cargarif() {
+    // var ID = function () {
+    //   return  Math.floor(Math.random() * 26) + Date.now();
+    // }; 
+    if ($('#check_PRELIMINARES')[0].checked) { $('#table_preliminares').show(); $('#text_Preliminares').hide();  } else { $('#table_preliminares').hide(); $('#text_Preliminares').show() }
+    if ($('#check_FACTIBILIDADES')[0].checked) { $('#table_factibilidades').show(); $('#text_Factibilidades').hide(); } else { $('#table_factibilidades').hide(); $('#text_Factibilidades').show() }
+    if ($('#check_ESTUDIOS')[0].checked) { $('#table_estudios').show(); $('#text_Estudios').hide(); } else { $('#table_estudios').hide(); $('#text_Estudios').show() }
+    if ($('#check_DIR')[0].checked) { $('#table_tra').show(); $('#text_Dir').hide(); } else { $('#table_tra').hide(); $('#text_Dir').show() }
+    if ($('#check_MUNICIPALES')[0].checked) { $('#table_municipales').show(); $('#text_Municipales').hide(); } else { $('#table_municipales').hide(); $('#text_Municipales').show() }
+    if ($('#check_ESTATALES')[0].checked) { $('#table_estatales').show(); $('#text_Estatales').hide(); } else { $('#table_estatales').hide(); $('#text_Estatales').show()}
+    if ($('#check_FEDERALES')[0].checked) { $('#table_federales').show(); $('#text_Federales').hide(); } else { $('#table_federales').hide(); $('#text_Federales').show()}
+    if ($('#check_CONDICIONATES')[0].checked) {$('#table_condicionales').show(); $('#text_Condicionates').hide();} else {$('#table_condicionales').hide(); $('#text_Condicionates').show();}
+    if ($('#check_SEGUIMIENTO')[0].checked) { $('#table_seguimiento').show(); $('#text_Seguimiento').hide(); } else { $('#table_seguimiento').hide(); $('#text_Seguimiento').show()}
+    if ($('#check_CFE_DONACION')[0].checked) { $('#table_donacion_cfe').show(); $('#text_Donación').hide(); } else { $('#table_donacion_cfe').hide(); $('#text_Donación').show()}
+    if ($('#check_CATASTRO')[0].checked) { $('#table_catastro').show(); $('#text_Catastro').hide(); } else { $('#table_catastro').hide(); $('#text_Catastro').show()}
+    if ($('#check_CFE')[0].checked) { $('#table_cfe').show(); $('#text_CFE').hide(); } else { $('#table_cfe').hide(); $('#text_CFE').show()}
+    if ($('#check_JAPAY')[0].checked) { $('#table_japay').show(); $('#text_JAPAY').hide(); } else { $('#table_japay').hide(); $('#text_JAPAY').show()}
+    if ($('#check_ARBOREA')[0].checked) { $('#table_arborea').show(); $('#text_ARBOREA').hide(); } else { $('#table_arborea').hide(); $('#text_ARBOREA').show()}
+  }
+  function cargarifREsponsive() {
+    if ($('#check_PRELIMINARES_responsive')[0].checked) { $('#table_preliminares_responsive').show(); $('#text_Preliminares').hide(); } else { $('#table_preliminares_responsive').hide(); $('#text_Preliminares').show(); }
+    if ($('#check_FACTIBILIDADES_responsive')[0].checked) { $('#table_factibilidades_responsive').show(); $('#text_Preliminares').hide(); } else { $('#table_factibilidades_responsive').hide(); }
+    if ($('#check_ESTUDIOS_responsive')[0].checked) { $('#table_estudios_responsive').show(); $('#text_Preliminares').hide();} else { $('#table_estudios_responsive').hide(); }
+    if ($('#check_DIR_responsive')[0].checked) { $('#table_tra_responsive').show();  } else { $('#table_tra_responsive').hide(); }
+    if ($('#check_MUNICIPALES_responsive')[0].checked) { $('#table_municipales_responsive').show(); } else { $('#table_municipales_responsive').hide(); }
+    if ($('#check_ESTATALES_responsive')[0].checked) { $('#table_estatales_responsive').show(); } else { $('#table_estatales_responsive').hide(); }
+    if ($('#check_FEDERALES_responsive')[0].checked) { $('#table_federales_responsive').show(); } else { $('#table_federales_responsive').hide(); }
+    if ($('#check_CONDICIONATES_responsive')[0].checked) { $('#table_condicionales_responsive').show(); } else { $('#table_condicionales_responsive').hide(); }
+    if ($('#check_SEGUIMIENTO_responsive')[0].checked) { $('#table_seguimiento_responsive').show(); } else { $('#table_seguimiento_responsive').hide(); }
+    if ($('#check_CFE_DONACION_responsive')[0].checked) { $('#table_donacion_cfe_responsive').show(); } else { $('#table_donacion_cfe_responsive').hide(); }
+    if ($('#check_CATASTRO_responsive')[0].checked) { $('#table_catastro_responsive').show(); } else { $('#table_catastro_responsive').hide(); }
+    if ($('#check_CFE_responsive')[0].checked) { $('#table_cfe_responsive').show(); } else { $('#table_cfe_responsive').hide(); }
+    if ($('#check_JAPAY_responsive')[0].checked) { $('#table_japay_responsive').show(); } else { $('#table_japay_responsive').hide(); }
+    if ($('#check_ARBOREA_responsive')[0].checked) { $('#table_arborea_responsive').show(); } else { $('#table_arborea_responsive').hide(); }
+  }
+</script>
+{% endblock %}

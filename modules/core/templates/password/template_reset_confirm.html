@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Cambio de contraseña</title>
+{% endblock head_content %}
+
+{% block container %}
+<section class="login">
+    {% if validlink %}
+    <section class="reset-container-password">
+        <div class="reset-card-password">
+            <article class="password-form">
+                <h3>Cambiar contraseña</h3>
+                <p>Ingrese el password deseado.</p>
+                <form method="POST">{% csrf_token %}
+                    <label for="id_new_password1">Nueva contraseña</label>
+                    <input type="password" name="new_password1" id="id_new_password1" onKeyDown="validationPassword();"
+                        onKeyUp="validationPassword();" onkeypress="validationPassword();" required>
+                    <p toggle="#id_new_password1" id="error-password" class="error-input-password1">
+                    </p>
+                    <span toggle="#id_new_password1" class="fa fa-fw fa-eye reset-pass1 toggle-password"
+                        id="check-password1"></span>
+
+                    <label for="id_new_password2">Confirmar contraseña</label>
+                    <input type="password" name="new_password2" id="id_new_password2" onKeyDown="passwordVerific();"
+                        onKeyUp="passwordVerific();" onkeypress="passwordVerific();" required>
+                    <p toggle="#id_new_password2" id="error-password2" class="error-input-password2">
+                    </p>
+                    <span toggle="#id_new_password2" class="fa fa-fw fa-eye reset-pass2 toggle-password"
+                        id="check-password2"></span>
+                    <button type="submit">Cambiar contraseña</button>
+                </form>
+            </article>
+            <article class="password-error">
+                <i class="fas fa-exclamation-circle" id="exclamation-hidden"></i>
+                {{ form.new_password2.errors }}
+            </article>
+        </div>
+    </section>
+    {% else %}
+    <section class="error-container-token">
+        <div class="error-card-token">
+            <article class="error-token">
+                <h3>Link vencido</h3>
+                <p>Desafortudadamente el link ha caducado, por favor solicite nuevamente restablecer contraseña.</p>
+                <form action="{% url 'reset_password' %}">
+                    <button type="submit">Restablecer contraseña</button>
+                </form>
+            </article>
+        </div>
+    </section>
+</section>
+{% endif %}
+{% endblock%}
+{% block scripts %}
+<!-- validator reset password -->
+<script src="{% static 'js/validator-input-resetPassword.js' %}"></script>
+{% endblock %}

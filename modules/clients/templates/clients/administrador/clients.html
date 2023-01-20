@@ -1,0 +1,871 @@
+{% extends "users/baseAdmin.html" %}
+{% load static %}
+{% block head_content %}
+<title>GE | Lista de clientes</title>
+{% endblock head_content %}
+
+{% load static %}
+{% block statics_files %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% endblock %}
+{% block section %}
+<section class="control">
+    <div></div>
+    <div class="btn-user">
+        <a onclick="return abrir_modal()" class="btn btn-primary">
+            <i class="plus icon" style="font-size: 24px;"></i> Crear cliente
+        </a>
+    </div>
+</section>
+<!-- ------------------------------------------------- diseño de la tabla principal ----------------------------------->
+<section class="info-section">
+    <table class="ui single line table">
+        <thead>
+            <th>Razón social</th>
+            <th>RFC</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Ext.</th>
+            <th>Direccion</th>
+            <th>Clientes</th>
+            <th>Proyectos</th>
+            <!-- <th>Calle</th> -->
+            <!-- <th>n.º Exterior</th> -->
+            <!-- <th>n.º Interior</th> -->
+            <!-- <th>C.P.</th> -->
+            <!-- <th>Colonia</th> -->
+            <!-- <th>Estado</th> -->
+            <!-- <th>Municipio</th> -->
+            <th></th>
+            <th></th>
+        </thead>
+        <tbody>
+            {% for client in  clients %}
+                <tr id="project_{{client.pk}}">
+                    <td><input class="input-max-hover" type="text" name="business_name"
+                        value="{{client.business_name}}" maxlength="255" required
+                        id="id_business_name_{{client.pk}}">
+                    </td>
+                    <td>
+                        <input class="input-max-hover" type="text" name="rfc" maxlength="14"
+                                                value="{{client.rfc}}" required id="id_rfc_{{client.pk}}">
+                    </td>
+                    <td>
+                        <input class="input-max-hover" type="email" name="email_business" maxlength="254"
+                                            required value="{{client.email_business}}"
+                                            id="id_email_business_{{client.pk}}">
+                    </td>
+                    <td>
+                        <input class="input-max-hover" type="tel" name="phone_number_bussiness"
+                                                maxlength="15" max="9999999999"
+                                                id="id_phone_number_bussiness_{{client.pk}}"
+                                                value="{{client.phone_number_bussiness}}">
+                    </td>
+                    <td>
+                        <input class="input-min-hover" type="tel" name="ext" maxlength="5" max="99999"
+                                                id="id_ext_{{client.pk}}" value="{{client.ext}}">
+                    </td>
+                    <td style="cursor: pointer;">
+                        <a onclick="return direccion('{{client.pk}}')">Direccion</a>
+                    </td>
+                    <td class="init-load-client" onload="loadClient('{{client.pk}}')">
+                        <select name="skills" multiple="multiple"
+                                        class="ui fluid dropdown init-select-user"  id="id_user_{{client.pk}}">
+                                        
+                                    </select>
+                    </td>
+                    <td class="init-load-project" onload="loadproject('{{client.pk}}')">
+                        <select name="skills" multiple="multiple"
+                                        class="ui fluid dropdown init-select-project"  id="id_project_{{client.pk}}">
+                                        
+                                    </select>
+                    </td>
+
+                    <td>
+                        <a style="cursor: pointer; color: #55565a; font-size: 14px;"
+                        onclick="return deleteProject('{{project.pk}}')">
+                        <i id="delete_icon_{{project.pk}}" class="trash icon"></i>
+                    </a>
+                    </td>
+                    <td>
+                        <a style="cursor: pointer; color: #FFC600; font-size: 14px;"
+                        onclick="return update_project('{{project.pk}}')">
+                        <i class="save icon"></i>
+                    </a>
+                    </td>
+                </tr>
+                <div id="direccion_modal_{{client.pk}}" class="ui mini modal">
+                    <i class="close icon"></i>
+                    <div class="header"> Direccion </div>
+                    <div class="content">
+                        <div class="ui form">
+                            <div class="field">
+                                <label for="">Calle</label>
+                                <input class="input-max-hover" type="text" name="street" maxlength="255"
+                                id="id_street_{{client.pk}}" value="{{client.street}}">
+                            </div>
+                            <div class="field">
+                                <label for="">N°. exterior</label>
+                                <input class="input-min-hover" type="text" name="outdoor_number"
+                                                value="{{client.outdoor_number}}" maxlength="7"
+                                                id="id_outdoor_number_{{client.pk}}">
+                            </div>
+                            <div class="field">
+                                <label for="">N°. Interior</label>
+                                <input class="input-min-hover" type="text" name="interior_number"
+                                                value="{{client.interior_number}}" maxlength="7"
+                                                id="id_interior_number_{{client.pk}}">
+                            </div>
+                            <div class="field">
+                                <label for="">Codigo postal</label>
+                                <input class="input-min-hover" type="number" name="cp" value="{{client.cp}}"
+                                                oninput="maxLengthCheck(this)"
+                                                onkeyup="keyup_personalized({{client.pk}})" maxlength="5" max="99999"
+                                                required id="id_cp_{{client.pk}}">
+                            </div>
+                            <div class="field">
+                                <label for="">Colonia</label>
+                                <select class="ui dropdown" id="id_suburn_{{client.pk}}" style="width: 100px;">
+                                    <option value="{{client.pk}}" selected>{{client.suburn}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="">Municipio</label>
+                                <input class="input-max-hover" type="text" name="municipality"
+                                                value="{{client.municipality}}" maxlength="255" required
+                                                id="id_municipality_{{client.pk}}">
+                            </div>
+                            <div class="field">
+                                <label for="">Estado</label>
+                                <input class="input-max-hover" type="text" name="estado"
+                                                value="{{client.estado}}" maxlength="255" required
+                                                id="id_estado_{{client.pk}}" readonly>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+<!-- ------------------------------------------------------crear cliente ---------------------------------------------->
+<div id="popup" class="ui tiny longer modal" style="height: 55% !important;">
+    <i class="close icon"></i>
+    <div class="header">
+        <h3>Crear cliente</h3>
+    </div>
+    <div class="scrolling content" style="max-height: calc(75%); height: 75% !important;">
+        <form method="post" id="form-client" data-url="{% url 'clients_api' %}">{% csrf_token %}
+            <div class="select-personalizate">
+                <label for="id_login" class="label-form-two">Usuario</label><br>
+                <select name="skills" multiple="multiple" class="ui fluid dropdown" id="id_select_user">
+
+                </select>
+            </div>
+            <div class="select-personalizate">
+                <label for="id_project" class="label-form-two">Proyecto</label><br>
+                <select name="skills" multiple="multiple" class="ui fluid dropdown" id="id_select_project">
+
+                </select>
+            </div>
+
+            <div class="form-user" style="margin-left: 5%;">
+                <div class="ui grid">
+                    <div class="fourteen wide column">
+                        <div class="ui form" style="margin-top: 15px;">
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="industry icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label>Razón social</label><br>
+                                    <input class="input-form" type="text" id="id_business_name" name="business_name"
+                                        maxlength="150" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="qrcode icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">RFC</label><br>
+                                    <input class="input-form" type="text" id="id_rfc" name="rfc" maxlength="13"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="envelope outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Correo</label><br>
+                                    <input class="input-form" type="email" id="id_email_business" name="email_business"
+                                        maxlength="255" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="phone icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Teléfono</label><br>
+                                    <input class="input-form" type="tel" id="id_phone_number_bussiness"
+                                        name="phone_number_bussiness" maxlength="15" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="hashtag icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Ext.</label><br>
+                                    <input class="input-form" id="id_ext"  type="tel" name="ext">
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map signs icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Calle</label><br>
+                                    <input class="input-form" type="text" id="id_street" name="street" maxlength="222"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="building outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">n.º Exterior</label><br>
+                                    <input class="input-form" type="text" id="id_outdoor_number" name="outdoor_number"
+                                        maxlength="7" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="key icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">n.º Interior</label><br>
+                                    <input class="input-form" type="text" id="id_interior_number" name="interior_number"
+                                        maxlength="7" required>
+                                </div>
+                            </div>
+                            
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="envelope open outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">C.P.</label><br>
+                                    <input class="input-form" type="number" oninput="maxLengthCheck(this)" id="id_cp"
+                                        min="00000" max="99999" name="cp" maxlength="5" required>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map pin icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Colonia</label><br>
+                                    <select class="ui dropdown" id="create-suburn">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Localida</label><br>
+                                    <input class="input-form" type="text" name="location" id="id_location"
+                                        maxlength="255" value="prueba">
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="map outline icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Estado</label><br>
+                                    <input class="input-form" type="text" name="estado" id="id_estado" maxlength="255"
+                                        required readonly>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <div class="field">
+                                    <div class="ui list">
+                                        <div class="item">
+                                            <i class="thumbtack icon icon-sizee"
+                                                style="color: #55565a; margin-bottom: 100%;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label-form-two">Municipio</label><br>
+                                    <input class="input-form" type="text" name="municipality" maxlength="122"
+                                        id="id_municipality" required readonly>
+                                </div>
+                            </div>
+                            <div style="display: flex;">
+                                <button class="medium ui button bt-update" style="margin: auto;"
+                                    id="add_client">GUARDAR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+</div>
+<!-- ----------------------------------------------- eliminacion de un cliente----------------------------------------->
+<div id="delete_modal" class="ui mini modal">
+    <div class="header">Header</div>
+    <div class="content">
+        <p>Desea eliminar este cliente </p>
+    </div>
+    <div class="actions">
+        <div class="ui red deny inverted button">
+            <i class="remove icon"></i>
+            No
+        </div>
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+<!-- -------------------------------------------------------------------------------------------------------------- -->
+{% endblock%}
+{% block scripts %}
+<script>
+    $('.client-hidde').hide();
+    $('#id_select_user').dropdown({ showOnFocus: false });
+    $('#id_select_project').dropdown({ showOnFocus: false });
+    $('#create-suburn').dropdown({ showOnFocus: false });
+    $('.init-select-user').dropdown();
+    $('.init-select-project').dropdown();
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    var select_user = '{% url 'user_create_list' %}' + '?client=1'
+    let optionListUser = document.getElementById('id_select_user').options;
+    var listuser
+    $.ajax({
+        url: select_user,
+        dataType: "json",
+        success: function (data) {
+            listuser = data
+            data.forEach(function (user, index) {
+                optionListUser.add(
+                    new Option(user.first_name + ' ' + user.last_name, user.userRol.id)
+                )
+            })
+        }
+    })
+    var select_project = '{% url 'projects_api' %}'
+    let optionListProject = document.getElementById('id_select_project').options;
+    var listProject
+    $.ajax({
+        url: select_project,
+        dataType: "json",
+        success: function (data) {
+            listProject = data
+            data.forEach(function (project, index) {
+                optionListProject.add(
+                    new Option(project.name_project + ' / ' + project.municipality, project.id)
+                )
+            })
+        }
+    })
+
+    $(function () {
+        $('.init-load-client').trigger('onload');
+        $('.init-load-project').trigger('onload');
+    })
+
+    function abrir_modal(url) {
+        $('.ui.tiny.modal').modal({closable: false}).modal('show');
+    }
+    function see(pk) {
+        var detail = '#detail_client_' + pk
+        var edit = '#edit_client_' + pk
+        var row_section = '#client_' + pk
+        var icon = '#client_icon_' + pk
+        var icon_trash = '#delete_icon_' + pk
+        var icon_edit = '#edit_icon_' + pk
+        var icon_see = '#eye_icon_' + pk
+        if ($(row_section).hasClass('tableP-row')) {
+            $(row_section).addClass('tableP-row-select').removeClass('tableP-row');
+            $(icon).addClass('down').removeClass('right')
+            $(icon).addClass('efect-arrow-select').removeClass('efect-arrow');
+            $(icon_trash).show()
+            $(icon_edit).show()
+            $(detail).show("slow")
+        } else {
+            $(icon).addClass('right').removeClass('down')
+            $(icon).addClass('efect-arrow').removeClass('efect-arrow-select');
+            $(row_section).addClass('tableP-row').removeClass('tableP-row-select');
+            $(detail).hide("slow")
+            $(edit).hide("slow")
+            $(icon_trash).hide()
+            $(icon_edit).hide()
+            $(icon_see).hide()
+        }
+    }
+    function update(pk) {
+        $('#id_project_' + pk).html('')
+        $('#id_user_' + pk).html('')
+        var detail = '#detail_client_' + pk
+        var edit = '#edit_client_' + pk
+        var icon_trash = '#delete_icon_' + pk
+        var icon_see = '#eye_icon_' + pk
+        var icon_edit = '#edit_icon_' + pk
+        $(icon_see).show();
+        $(icon_trash).show();
+        $(icon_edit).hide();
+        $(detail).hide('slow');
+        $(edit).show('slow');
+
+        var cliente_update_project = '{% url 'clients_api' %}' + pk
+        var optionListUserPerso = document.getElementById('id_user_' + pk).options
+        var optionListProjectUpdate = document.getElementById('id_project_' + pk).options
+        var cp_update = $('#id_cp_' + pk).val()
+        var url_api_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + cp_update;
+        let optionListCpReady = document.getElementById('id_suburn_' + pk).options;
+        let listaCP
+        
+
+        $.ajax({
+            url: cliente_update_project,
+            dataType: "json",
+            success: function (data) {
+                for (let i = 0; i < listuser.length; i++) {
+                    var isSelected = data.users.find(function (item) {
+                        return item == listuser[i].userRol.id
+                    })
+                    if (isSelected) {
+                        optionListUserPerso.add(
+                            new Option(listuser[i].first_name + ' ' + listuser[i].last_name, listuser[i].userRol.id, true, true)
+                        )
+                    } else {
+                        optionListUserPerso.add(
+                            new Option(listuser[i].first_name + ' ' + listuser[i].last_name, listuser[i].userRol.id, false, false)
+                        )
+                    }
+                }
+                for (let m = 0; m < listProject.length; m++) {
+                    var isSelectedProject = data.projects.find(function (item_project) {
+                        return item_project == listProject[m].id
+                    })
+                    if (isSelectedProject) {
+                        optionListProjectUpdate.add(
+                            new Option(listProject[m].name_project, listProject[m].id, true, true)
+                        )
+                    } else {
+                        optionListProjectUpdate.add(
+                            new Option(listProject[m].name_project, listProject[m].id, false, false)
+                        )
+                    }
+                    
+                }
+                $.ajax({
+            url: url_api_codigos,
+            dataType: "json",
+            success: function(listaCP) {
+                $('#id_suburn_' + pk).html('')
+                for (let j = 0; j < listaCP.results.length; j++) {
+                    if (listaCP.results[j].asentamiento == data.suburn) {
+                        optionListCpReady.add(
+                            new Option(listaCP.results[j].asentamiento + '/' + listaCP.results[j].tipo_asentamiento , listaCP.results[j].asentamiento, true, true )
+                        )
+                    } else {
+                        optionListCpReady.add(
+                            new Option(listaCP.results[j].asentamiento + '/' + listaCP.results[j].tipo_asentamiento , listaCP.results[j].asentamiento, false, false )
+                        )
+                    }
+                    
+                }
+            }
+        })
+                
+            }
+        })
+    }
+    function read(pk) {
+        var detail = '#detail_client_' + pk;
+        var edit = '#edit_client_' + pk;
+        var icon_trash = '#delete_icon_' + pk;
+        var icon_see = '#eye_icon_' + pk;
+        var icon_edit = '#edit_icon_' + pk;
+        $(icon_trash).show();
+        $(icon_edit).show();
+        $(icon_see).hide();
+        $(edit).hide('slow');
+        $(detail).show('slow');
+
+    }
+    $('#add_client').click(function (event) {
+        event.preventDefault();
+        var extension
+        if ($('#id_ext').val()) {
+            extension = $('#id_ext').val()
+        } else {
+            extension = 0
+        }
+        var client = {
+            'business_name': $('#id_business_name').val(),
+            'rfc': $('#id_rfc').val(),
+            'street': $('#id_street').val(),
+            'interior_number': $('#id_interior_number').val(),
+            'outdoor_number': $('#id_outdoor_number').val(),
+            'cp': $('#id_cp').val(),
+            'suburn': $('#create-suburn').val(),
+            'location': $('#id_location').val(),
+            'municipality': $('#id_municipality').val(),
+            'estado': $('#id_estado').val(),
+            'email_business': $('#id_email_business').val(),
+            'phone_number_bussiness': $('#id_phone_number_bussiness').val(),
+            'ext': extension,
+            'users': $('#id_select_user').val(),
+            'projects': $('#id_select_project').val()
+        }
+        // console.log(client)
+        $.ajax({
+            url: $('#form-client').attr('data-url'),
+            type: 'POST',
+            data: JSON.stringify(client),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Creando cliente...'
+                });
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        });
+    });
+    function update_client(pk) {
+        var client_udpate = {
+            'business_name': $('#id_business_name_' + pk).val(),
+            'rfc': $('#id_rfc_' + pk).val(),
+            'street': $('#id_street_' + pk).val(),
+            'interior_number': $('#id_interior_number_' + pk).val(),
+            'outdoor_number': $('#id_outdoor_number_' + pk).val(),
+            'cp': $('#id_cp_' + pk).val(),
+            'suburn': $('#id_suburn_' + pk).val(),
+            'municipality': $('#id_municipality_' + pk).val(),
+            'estado': $('#id_estado_' + pk).val(),
+            'email_business': $('#id_email_business_' + pk).val(),
+            'phone_number_bussiness': $('#id_phone_number_bussiness_' + pk).val(),
+            'ext': $('#id_ext_' + pk).val(),
+            'users': $('#id_user_' + pk).val(),
+            'projects': $('#id_project_' + pk).val()
+        }
+        $.ajax({
+            url: $('#edit_client_' + pk).attr('data-url'),
+            type: 'PATCH',
+            data: JSON.stringify(client_udpate),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function(xhr, settings){
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Actualizando cliente...'
+                });
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            console.log(done)
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        });
+    }
+    function deleteClient(pk) {
+        // $('#delete_modal').modal({
+            $('.ui.mini.modal').modal({
+            // closeble: function() {
+            //     return false
+            // }
+            closable  : false,
+            onDeny: function () {
+                alert('Wait not yet!');
+                return false;
+            },
+            onApprove: function () {
+                delete_client(pk)
+            }
+        }).modal('show');
+    }
+    function delete_client(pk) {
+        let url = '{% url 'clients_api' %}' + pk
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+                $.blockUI({
+                    css: {
+                        border: 'none',
+                        padding: '30px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: 1,
+                        color: '#fff'
+                    },
+                    message: 'Eliminando projecto............'
+                });
+            }
+        }).done(function (done) {
+            $.unblockUI();
+            window.location.reload();
+        }).fail(function (error) {
+            $.unblockUI();
+            console.log(error)
+        })
+    }
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function maxLengthCheck(object) {
+        if (object.value.length > object.maxLength)
+            object.value = object.value.slice(0, object.maxLength)
+    }
+    $('#id_cp').keyup(function () {
+        var complement = $('#id_cp').val()
+        var url_api_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + complement;
+        search_cp(url_api_codigos);
+    })
+    function keyup_personalized(pk) {
+        var complement_personalized = $('#id_cp_' + pk).val()
+        var url_api_codigos = '{% url 'codigos' %}' + '?codigo_postal=' + complement_personalized;
+        if ($('#id_cp_' + pk).val().length == 5)
+            $('#id_estado').val('');
+        $('#id_municipality').val('');
+        search_cp_personalized(url_api_codigos, pk);
+    }
+    function search_cp(url_search) {
+        let optionListCP = document.getElementById('create-suburn').options
+        $.ajax({
+            url: url_search,
+            dataType: "json",
+            success: function (data) {
+                if (data.count == 0) {
+                } else if ($('#id_cp').val().length == 5) {
+                    $('#create-suburn').html('');
+                    $('#id_estado').val(data.results[0].estado);
+                    $('#id_municipality').val(data.results[0].municipio);
+                    data.results.forEach(function (lugar, index) {
+                        let text_asentamiento = lugar.asentamiento + '/' + lugar.tipo_asentamiento
+                        let value_asentamiento = lugar.asentamiento
+                        optionListCP.add(
+                            new Option(text_asentamiento, value_asentamiento)
+                        )
+                    });
+                } else {
+                    console.log('Eliminando')
+                }
+            }
+        })
+    }
+    function search_cp_personalized(url_search, pk) {
+        let optionListPersonalized = document.getElementById('id_suburn_' + pk).options;
+        $.ajax({
+            url: url_search,
+            dataType: "json",
+            success: function (data) {
+                if (data.count == 0) {
+                } else if ($('#id_cp_' + pk).val().length == 5) {
+                    $('#id_suburn_' + pk).html('')
+                    $('#id_estado_' + pk).val(data.results[0].estado);
+                    $('#id_municipality_' + pk).val(data.results[0].municipio);
+                    data.results.forEach(function (lugar, index) {
+                        let text_asentamiento = lugar.asentamiento + '/' + lugar.tipo_asentamiento
+                        let value_asentamiento = lugar.asentamiento
+                        optionListPersonalized.add(
+                            new Option(text_asentamiento, value_asentamiento)
+                        )
+                    })
+                } else {
+                    console.log('Eliminando')
+                }
+            }
+        })
+    }
+    function direccion(pk) {
+        $('#direccion_modal_' + pk).modal('show')
+    }
+
+    //----------- loads -------------
+    function loadClient(pk){
+        var Client_list = '{% url 'clients_api' %}' +pk
+        let OptionsListUser = document.getElementById('id_user_' + pk).options
+        var select_user = '{% url 'user_create_list' %}' + '?client=1'
+        $.ajax({
+            url: select_user,
+            dataType: "json",
+            success: function(data) {
+                $.ajax({
+                    url: Client_list,
+                    dataType: "json",
+                    success: function(data_client_list) {
+                        data.forEach(function (val, index) {
+                            var isSelect = data_client_list.users.find(function(item){
+                                return item == val.userPerson.id
+                            })
+                            if (isSelect) {
+                                OptionsListUser.add(
+                                    new Option(val.first_name, val.pk, true, true)
+                                )
+                            } else {
+                                OptionsListUser.add(
+                                    new Option(val.first_name, val.pk, false, false)
+                                )
+                                
+                            }
+                        })
+                    }
+                })
+            }
+
+        })
+        
+
+    }
+    function loadproject(pk) {
+        var Client_list = '{% url 'clients_api' %}' + pk
+        let OptionsListProject =  document.getElementById('id_project_' + pk).options
+        var select_project = '{% url 'projects_api' %}'
+        $.ajax({
+            url: select_project,
+            dataType: "json",
+            success: function(data_projects) {
+                $.ajax({
+                    url:Client_list,
+                    dataType: "json",
+                    success: function(data_projects_client) {
+                        data_projects.forEach(function (val, idenx) {
+                            var isSelect =  data_projects_client.projects.find(function(item){
+                                return item == val.id
+                            });
+                            console.log(isSelect)
+                            if (isSelect) {
+                                OptionsListProject.add(
+                                    new Option(val.name_project, val.id, true, true)
+                                )
+                            }else {
+                                OptionsListProject.add(
+                                    new Option(val.name_project, val.id, false, false)
+                                )
+                            }
+
+                        })
+                    }
+                })
+            }
+        })
+    }
+
+</script>
+{% endblock %}

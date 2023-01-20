@@ -1,0 +1,1015 @@
+:root {
+    --default: #eeeeee;
+    --primary: #000000;
+    --secundary: #FFC600;
+    --secundary-opacity: rgba(255, 198, 0, .8);
+    --info: #55565a;
+    --hover: rgba(85, 86, 90, .1);
+    --muted: #77777A;
+    --object: #c9c6c6;
+    --disable: rgba(0, 0, 0, .3)
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900i&display=swap');
+
+/* * {
+    padding: 0;
+    margin: 0;
+} */
+
+body {
+    background-color: var(--default);
+    font-family: 'Roboto', sans-serif;
+}
+
+.ui-widget-overlay {
+    opacity: 0.7 !important;
+}
+
+/* table source */
+
+body.dragging, body.dragging * {
+    cursor: move !important;
+}
+  
+.dragged {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 2000;
+}
+tbody.sorted_table tr.placeholder {
+    position: relative;
+    /** More li styles **/
+}
+tbody.sorted_table tr.placeholder:before {
+    position: absolute;
+    /** Define arrowhead **/
+}
+/* ------------ */
+
+/* ------ Login ------ */
+
+.login {
+    margin: 0 auto;
+    padding: 10%;
+    width: 700px;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+.login-container {
+    width: 85%;
+    height: 500px;
+}
+
+.card-login {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-login-logo {
+    width: 60%;
+}
+
+.card-login-logo img {
+    width: 100%;
+}
+
+.card-login-title {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 90%;
+}
+
+.login-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 24pt;
+    font-weight: normal;
+    color: var(--secundary);
+}
+
+.card-login-container {
+    width: 80%;
+    padding: 0%;
+    margin-top: 0;
+}
+
+.card-login-container input {
+    width: 75%;
+    padding: 12px 20px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    border: 1px solid var(--muted);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--muted);
+}
+
+.error-global {
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+    color: red;
+    font-size: 12pt;
+    z-index: 2;
+    position: absolute;
+}
+
+.error-input {
+    margin-top: -22px;
+    margin-left: 4%;
+    margin-bottom: 0px;
+    color: red;
+    font-size: 10pt;
+    z-index: 2;
+    position: absolute;
+}
+
+.card-login-container input:focus {
+    border: 1px solid var(--secundary);
+    outline-color: var(--secundary);
+}
+
+.card-login-container button {
+    background-color: var(--secundary);
+    color: white;
+    padding: 12px 16px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 36px;
+    font-size: 14px;
+    min-width: 64px;
+}
+
+.card-login-container button:hover {
+    background-color: var(--secundary-opacity);
+}
+
+.card-login-container-p {
+    margin-top: 0;
+}
+
+.card-login-container-p a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.field-icon {
+    float: right;
+    margin-left: -40px;
+    margin-top: 15px;
+    position: absolute;
+    z-index: 2;
+    color: var(--disable)
+}
+
+/* ----- End Login ----- */
+
+/* -----  Reset Password  ----- */
+.reset-container {
+    background-color: white;
+    width: 570px;
+    height: 350px;
+    padding: 30px 24px;
+    position: relative;
+}
+
+.reset-card {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: end;
+}
+
+.reset-card h3 {
+    width: 100%;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 18pt;
+    color: var(--info);
+}
+
+.reset-card p {
+    width: 100%;
+    margin-bottom: 30px;
+    font-weight: 400;
+    font-size: 12pt;
+    color: var(--info);
+}
+
+.color-error {
+    color: red !important;
+    font-size: 10pt !important;
+}
+
+.reset-card form {
+    width: 100%;
+    height: 122px;
+    margin-bottom: 30px;
+}
+
+.reset-card form input {
+    width: 60%;
+    padding: 12px 20px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    border: 1px solid var(--muted);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--info)
+}
+
+.reset-card form input:focus {
+    border: 1px solid var(--secundary);
+    outline-color: var(--secundary);
+}
+
+.reset-card form button {
+    background-color: transparent;
+    color: var(--secundary);
+    margin-top: 0;
+    margin-bottom: 30px;
+    border: 2px solid var(--secundary);
+    border-radius: 4px;
+    cursor: pointer;
+    height: 36px;
+    font-size: 12pt;
+    width: 50%;
+    font-weight: 400;
+}
+
+.reset-card form button:hover {
+    background-color: var(--secundary);
+    color: white;
+}
+
+.reset-card hr {
+    width: 100%;
+    border: 1px solid #c9c6c6;
+    position: absolute;
+    top: 290px;
+    right: 0;
+}
+
+.reset-card div {
+    color: var(--muted);
+    text-align: start;
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+}
+
+.reset-card div i {
+    margin-right: 10px;
+    font-size: 18pt;
+    color: #c9c6c6;
+}
+
+.reset-card div span {
+    font-weight: 400;
+    font-size: 12pt;
+}
+
+.reset-card div span span {
+    color: var(--primary);
+}
+
+/* ----- end reset password ----- */
+
+/* -----  Reset Password done ----- */
+.reset-password-done-section {
+    width: 98%;
+    background: var(--secundary);
+    padding: 28px 1%;
+    border-radius: 0px 0px 20px 20px;
+    overflow: auto;
+}
+
+.reset-password-done-section div {
+    width: 100%;
+    color: var(--info);
+}
+
+.reset-password-done-section div p {
+    font-size: 12pt;
+}
+
+.reset-password-done-section div p span {
+    color: var(--primary);
+}
+
+/* ----- end reset password done ----- */
+
+/* -----  reset password confirm valid ----- */
+.reset-container-password {
+    background-color: white;
+    width: 570px;
+    height: 340px;
+    padding: 30px 24px;
+    position: relative;
+}
+
+.reset-card-password {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: end;
+}
+
+.error-container-token {
+    background-color: white;
+    width: 570px;
+    height: 140px;
+    padding: 30px 24px;
+    position: relative;
+}
+
+.error-card-token {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: end;
+}
+
+.password-form {
+    width: 280px;
+    margin-right: 50px;
+}
+
+.password-form h3 {
+    font-weight: bold;
+    font-size: 18pt;
+    color: var(--info);
+}
+
+.password-form p {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-weight: 400;
+    font-size: 12pt;
+    color: var(--info);
+}
+
+.password-form form {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.password-form form label {
+    width: 100%;
+    font-weight: 400;
+    font-size: 12pt;
+    color: var(--info);
+}
+
+.password-form form input {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    width: 75%;
+    height: 32px;
+    padding: 12px 20px;
+    border: 1px solid var(--muted);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--info);
+    background: white;
+}
+
+.password-form form input:focus {
+    border: 1px solid var(--secundary);
+    outline-color: var(--secundary);
+}
+
+.error-input-password1 {
+    top: 178px;
+    z-index: 2;
+    position: absolute;
+    color: red !important;
+    font-size: 10pt !important;
+}
+
+.error-input-password2 {
+    top: 272px;
+    z-index: 2;
+    position: absolute;
+    color: red !important;
+    font-size: 10pt !important;
+}
+
+.reset-pass1 {
+    position: absolute;
+    z-index: 2;
+    top: 161px;
+    left: 200px;
+    color: var(--muted);
+}
+
+.reset-pass2 {
+    position: absolute;
+    z-index: 2;
+    top: 257px;
+    left: 200px;
+    color: var(--muted);
+}
+
+.password-form form button {
+    background-color: transparent;
+    color: var(--secundary);
+    margin-top: 0;
+    margin-bottom: 30px;
+    border: 2px solid var(--secundary);
+    border-radius: 4px;
+    cursor: pointer;
+    height: 36px;
+    font-size: 12pt;
+    width: 75%;
+    font-weight: 400;
+}
+
+.password-form form button:hover {
+    background-color: var(--secundary);
+    color: white;
+}
+
+.password-error {
+    width: 230px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.password-error i {
+    margin-top: 90px;
+    margin-bottom: 0;
+    font-size: 18pt;
+    color: #c9c6c6;
+    height: 0;
+}
+
+.errorlist {
+    list-style: none;
+    color: red;
+    margin-top: -80px;
+}
+
+.errorlist li {
+    margin-top: 15px;
+    font-size: 12pt;
+}
+
+.error-token {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: start;
+}
+
+.error-token h3 {
+    font-weight: bold;
+    font-size: 18pt;
+    color: var(--info);
+    width: 100%;
+
+}
+
+.error-token p {
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-weight: 400;
+    font-size: 12pt;
+    color: var(--info);
+    width: 100%;
+}
+
+.error-token form {
+    width: 100%;
+}
+
+.error-token form button {
+    background-color: transparent;
+    color: var(--secundary);
+    margin-top: 0;
+    margin-bottom: 30px;
+    border: 2px solid var(--secundary);
+    border-radius: 4px;
+    cursor: pointer;
+    height: 36px;
+    font-size: 12pt;
+    width: 50%;
+    font-weight: 400;
+}
+
+.error-token form button:hover {
+    background-color: var(--secundary);
+    color: white;
+}
+
+/* ----- end reset password confirm valid ----- */
+
+
+
+/*-------------------------- header  ------------------------------- */
+header {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-color: #55565a;
+    display: flex !important;
+    flex-flow: nowrap row;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+}
+
+.logo img {
+    width: 34px;
+    height: 34px;
+}
+
+.division {
+    width: 1.5px;
+    height: 34px;
+    background: rgba(169, 181, 193, .5);
+    margin: 0 10px;
+    vertical-align: middle;
+    opacity: .7;
+}
+
+.settings {
+    width: 220px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: none;
+    color: white;
+    font-size: 16pt;
+    font-weight: normal;
+    position: relative;
+    margin-right: 24px;
+}
+
+.user-menu {
+    text-decoration: none;
+    border-radius: 15px;
+    color: white !important;
+    width: 38%;
+    margin-left: 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-menu:hover {
+    background-color: #FFDA58;
+    color: white !important;
+}
+
+.user-menu div {
+    font-size: 14px;
+    font-weight: 500;
+    background: #EBC400;
+    width: 24px;
+    height: 24px;
+    padding-top: 2px;
+    border-radius: 50%;
+    text-align: center;
+}
+.user-menu-activate {
+    background-color: #FFDA58;
+    color: white !important;
+}
+/* submenu nav vertical */
+
+.menu-responsive-effect-end {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.4s ease;  
+}
+
+.hidde-show-responsive {
+    height: 20px;
+    width: 160px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    color: var(--info);
+    cursor: pointer;
+    display: flex;
+
+}
+.hidde-show-responsive span {
+    font-size: 13px;
+}
+.vertical-hr-responsive {
+    width: 100%;
+    border: 1px #C9C6C6 solid;
+    margin-top: 0px;
+}
+
+/* -------------------- */
+/* submenu */
+
+.children {
+    background: white;
+    position: absolute;
+    /* padding: 7px 10px 14px; */
+    top: 50px;
+    right: 0px;
+    width: 200px;
+    height: 122px;
+    z-index: 1000;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+    list-style-type: none;
+    border-radius: 4px;
+    -webkit-box-shadow: 3px 3px 6px -1px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 3px 3px 6px -1px rgba(0, 0, 0, 0.35);
+    box-shadow: 3px 3px 6px -1px rgba(0, 0, 0, 0.35);
+}
+
+.children-effect-inicial {
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.4s ease;
+}
+
+.children-effect-end {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.4s ease;  
+}
+
+.children-icon {
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    
+}
+
+.children-icon:hover {
+    background-color: var(--hover);
+}
+
+.children-icon a {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--info) !important;
+}
+
+.children-icon a i {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 100%;
+    font-size: 12px;
+}
+
+.children-hr {
+    width: 100;
+    height: 1px;
+    background-color: var(--muted);
+}
+
+/* end  */
+
+.menu-fixed {
+	position:fixed;
+	z-index:1000;
+	top:0;
+	/* max-width:1000px; */
+	width:100%;
+	
+}
+
+/*-------------------------- end header  ------------------------------- */
+/* --------------------- nav ------------------------------------------- */
+.menu-vertical-class{
+    width: 6%; 
+    height: 100%; 
+    background: #77777A;
+}
+.container-data {
+    width: 95%; 
+    height: 100%;
+}
+#logo-menu {
+    display: none;
+}
+.links-menu {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: start;
+    color: white;
+    padding-left: 5px;
+}
+.links-menu i {
+    font-size: 14px !important;
+}
+.links-menu span {
+    font-size: 12px;
+}
+.effect-menu {
+    /* position: absolute; */
+    /* left: 0; */
+    height: 100%;
+    background-color: #77777A;
+    
+}
+.effect-menu-container {
+    height: 2%;
+    width: 100%;
+}
+
+.effect-menu-container-caret {
+    cursor: pointer !important;
+    float: right !important;
+    margin-right: -2px !important;
+    color: white !important;
+    font-size: 16px !important;
+}
+
+
+.btn-admi {
+    background-color: #77777A;
+    height: 30%;
+}
+.btn-admi2 {
+    background-color: #77777A;
+    height: 15%;
+}
+
+.btn-admi ul {
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+}
+.btn-admi2 ul {
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+}
+.btn-admi ul li {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    align-items: center;
+}
+.btn-admi2 ul li {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+}
+.btn-admin-active {
+    background-color: #FFC600;
+    font-weight: bold;
+
+}
+
+.btn-admin-active a {
+    color: var(--info) !important;
+}
+
+.btn-admi ul li a {
+    color: #DBDBDB;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row wrap;
+}
+.btn-admi2 ul li a {
+    color: #DBDBDB;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row wrap;
+}
+
+.btn-admi ul li:hover a {
+    color: white;
+    font-weight: bold;
+}
+.btn-admi2 ul li:hover a {
+    color: white;
+    font-weight: bold;
+}
+.btn-admi ul li a i {
+    width: 50%;
+    /* margin-top: 18px;
+    margin-bottom: 11px; */
+    font-size: 16px;
+    transition: color .3s;
+}
+.btn-admi2 ul li a i {
+    width: 50%;
+    /* margin-top: 18px;
+    margin-bottom: 11px; */
+    font-size: 14px;
+    transition: color .3s;
+}
+.btn-admi ul li:hover a i {
+    color: white;
+}
+.btn-admi2 ul li:hover a i {
+    color: white;
+}
+.btn-admi ul li a span {
+    width: 100%;
+    text-align: center;
+}
+.btn-admi2 ul li a span {
+    width: 100%;
+    text-align: center;
+}
+.vertical-hr {
+    margin-left: 10%;
+    width: 80%;
+    border: 1px #9A9999 solid;
+    
+}
+.hidde-show-admin {
+    height: 2%;
+    color: white;
+    cursor: pointer;
+    background: #77777A;
+    display: flex;
+
+}
+
+.hidde-show-admin span {
+    display: none;
+    font-size: 9px;
+    transition: display .5s;
+}
+
+.hidde-show-admin #icon-effect {
+    margin-left: 37%;
+    transition: margin-left .5s;
+}
+
+.hidde-show-admin:hover span {
+    display: block;
+}
+
+.hidde-show-admin:hover #icon-effect {
+    margin-left: 5%;
+}
+
+
+.btn-rol {
+    height: 62%;
+}
+
+.btn-rol ul {
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+}
+
+
+.btn-rol ul li {
+    height: 11.2%;
+    display: flex;
+    align-items: center;
+    outline: 0;
+}
+
+
+
+.btn-rol ul li a {
+    color: #DBDBDB;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.btn-rol ul li a i {
+    width: 50%;
+    font-size: 16px;
+    transition: color .3s;
+}
+
+.btn-rol ul li:hover a {
+    color: white;
+    font-weight: bold;
+}
+
+.btn-rol ul li:hover a i {
+    color: white;
+}
+
+.btn-rol ul li a span {
+    width: 100%;
+    text-align: center;
+}
+
+.hidden-menu {
+    font-size: 9px !important;
+}
+
+
+/* --------------------- end nav --------------------------------------- */
+
+.error-input-border {
+    border-color: red !important;
+}
+
+/* ----------------------- effect arrow table ------------------------- */
+.efect-arrow {
+    color: #c9c6c6;
+    font-size: 14px;
+}
+
+.efect-arrow:hover {
+    color: #55565a;
+}
+
+.efect-arrow-select {
+    color: var(--secundary);
+    font-size: 14px;
+}
+
+/* ----------------------- effect arrow table ------------------------- */
+
+/* --------------------------- data information ------------------------ */
+.responsive-data {
+    width: 90%; 
+    margin-left: 2%;
+}
+
+/* ------  validate url -------  */
+
+.button-validate {
+    width: 60%;
+    margin-top: 25px !important;
+}
+
+.button-validate:hover {
+    background-color: var(--secundary-opacity);
+}
+
+.button-validate-reset {
+    background-color: transparent !important;
+    color: var(--secundary) !important;
+    border: 2px solid var(--secundary) !important;
+    width: 60% !important;
+    padding: 9px 16px !important;
+}
+
+.button-validate-reset:hover {
+    background-color: var(--secundary) !important;
+    color: white !important;
+}
+
+.title-select {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 24pt;
+    font-weight: normal;
+    color: var(--info);
+    text-align: left;
+}
+
+.data-select {
+    color: var(--info);
+    text-align: left;
+    width: 90%;
+}
+
+/* rol tramitologia */
+#container-mobil {
+    display: none;
+}
+/* end rol */

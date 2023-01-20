@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head_content %}
+<title>GE | Validate</title>
+{% endblock head_content %}
+
+{% block container %}
+
+<section class="login">
+    <article class="login-container">
+        <div class="card-login">
+            <div class="card-login-logo">
+                <img src="{% static 'img/LogotipoGE.png' %}">
+            </div>
+            <div class="card-login-title">
+                <h1 id="welcome-title" class="title-select">
+                    Felicidades
+                </h1>
+            </div>
+            <h4 class="data-select">Se ha valido tu correo con exito</h4>
+            <div class="card-login-container">
+                <button class="button-validate" onclick="window.location.href = '{% url 'logout' %}';" >INICIAR SESIÓN</button><br>
+                <button class="button-validate-reset" onclick="window.location.href = '{% url 'reset_password' %}';" >RESTABLECER CONTRASEÑA</button>
+            </div>
+        </div>
+    </article>
+</section>
+
+{% endblock%}
+
+{% block scripts %}
+<!-- validator -->
+<script>
+    
+</script>
+
+{% endblock%}

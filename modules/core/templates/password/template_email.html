@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block container %}
+        <div class="error-card-token" style="padding: 40px; background-color: #eeeeee;">
+            <div style="background-color: white; padding: 40px;">    
+               
+                <img src="{% static 'img/LogotipoGE.png' %}">
+                <h3>Hola {{ user.get_full_name }}, aquí la manera de cómo restablecer su contraseña.</h3>
+                <p>Hemos recibido una solicitud para restablecer su contraseña de <b>gecontrucciones.com</b>.
+                    Si usted no hizo esta solicitud por favor ignore este mail.
+                </p>
+                <p>Para restablecer su contraseña, por favor visite el siguiente link:</p>
+                <a href="{{ protocol }}://{{ domain }}{% url 'reset_password_confirm' uidb64=uid token=token %}">Resetear
+                    password</a>
+                <br><br>
+                <hr>
+                <h4>
+                    ¿Tiene problemas?
+                </h4>
+                <p>Si el link no funciona por favor copie y pegue el link en tu navegador:</p>
+                <p>
+                    {% block reset_link %}
+                    {{ protocol }}://{{ domain }}{% url 'reset_password_confirm' uidb64=uid token=token %}
+                    {% endblock %}
+                </p>
+                <p>
+                    Si necesita más ayuda reenvía este mail o escribenos a <b>ayuda@gecontrucciones.com</b>
+                </p>
+            </div>
+        </div>
+{% endblock%}

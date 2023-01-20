@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block head_content %}
+    
+    {% endblock %}
+    {% load static %}
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+</head>
+<body>
+    {% block container %}
+        
+    {% endblock %}
+    <!-- jquery -->
+    <script src="{% static 'js/jquery-min.js' %}"></script>
+    <!-- javascripts -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

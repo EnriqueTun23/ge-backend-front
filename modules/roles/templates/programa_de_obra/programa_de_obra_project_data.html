@@ -1,0 +1,337 @@
+{% extends "base_roles.html" %}
+{% load static %}
+
+{% block breadcrumb %}
+<div class="ui breadcrumb" style="margin-top: 25px; margin-left: 2.5%; ">
+  <a href="{% url 'tramitologia' %}" class="section">Proyecto</a>
+  <i class="right angle icon divider"></i>
+  <a class="section">{{nombre}}</a>
+
+  <i class="right angle icon divider"></i>
+</div>
+{% endblock %}
+
+{% block header %}
+<table id="table_desktop" class="ui basic table">
+  <thead>
+    <tr>
+      <td colspan="7" style="width: 88%;">
+        <button onclick="modal_modulo()" type="button" class="ui labeled icon button btn-seccion">
+          <i class="plus icon" style="font-size: 16px !important;"></i>
+          AGREGAR MÓDULO
+        </button>
+      </td>
+      <td colspan="2" style="width: 12%;" class="right aligned">
+        <form method='GET'>
+          <div class="ui action input">
+            <input id="input_search"  type="text" placeholder="Buscar...">
+            <div id="search" class="ui button">Buscar</div>
+          </div>
+        </form>
+      </td>
+    </tr>
+    <tr style="font-size: 14px;">
+      <th style="color: #C9C6C6; width: 9%;">Reordenar</th>
+      <th style="color: #C9C6C6; width: 9%;">N.º</th>
+      <th style="color: #C9C6C6; width: 18%;" class="center aligned">Programa de obra</th>
+      <th style="color: #C9C6C6; width: 9%;" class="center aligned">Estatus</th>
+      <th style="color: #C9C6C6; width: 20%;" class="center aligned">Progreso</th>
+      <th style="color: #C9C6C6; width: 14%;" class="center aligned">Cronograma</th>
+      <th style="color: #C9C6C6; width: 9%;" class="center aligned">Porcentaje</th>
+      <th style="color: #C9C6C6; width: 8%;" class="center aligned">Números</th>
+      <th style="color: #C9C6C6; width: 4%;">Eliminar</th>
+    </tr>
+  </thead>
+</table>
+<!-- modal modulo -->
+<div id="modal_modulo" class="ui tiny longer modal" style="height: 55% !important;">
+  <i class="close icon"></i>
+  <div class="header" style="height: 25%; border-bottom: none; padding-bottom: 0;">
+    <h3 style="margin-bottom: 1%;">Módulo</h3>
+    <div class="ui icon fluid input" style="margin-bottom: 1%;">
+      <input class="prompt" type="text" style="padding: 10px 12px !important; font-size: 14px;"
+        id="input_search_modulo" onkeyup="search_modulo($(this))" placeholder="Buscar...">
+      <i class="search icon icon icon-tramitologia"></i>
+    </div>
+    <div>
+      <p id="error_delete_tramite" style="color: red; font-size: 14px; font-weight: 200;"></p>
+    </div>
+  </div>
+  
+  <div class="scrolling content" style="max-height: calc(65%); height: 65% !important; padding-top: 0.2em;">
+    <div class="ui form" id="list_modulo"></div>
+    <div class="ui grid" id="text-modulo">
+      <div class="sixteen wide column">
+      <span style="color: #55565A; font-size: 14px;">Agregar trámite:</span><br>
+      <span style="color: #55565A; font-size: 14px;" id="text-cambiante"></span>
+      </div>
+    </div>
+    <div class="ui grid" id="button-module">
+      <div class="four wide column"></div>
+      <div class="seven wide column">
+        <div>
+          <button class="fluid ui button ok" onclick="addModuloItem()"
+            style="background-color:#FFC600; color: white; cursor: pointer;">
+            AGREGAR  MÓDULO
+          </button>
+        </div>
+      </div>
+      <div class="four wide column "></div>
+    </div>
+  </div>
+  <div class="actions" style="padding: 2% 0 2% 0 !important;">
+    <button class="ui approve button" style="background-color:#FFC600; color: white; cursor: pointer;" id="id_ok_modulo" onclick="addModule()">AGREGAR</button>
+   </div>
+</div>
+<!-- ------------ -->
+
+<div id="modal_file" class="ui tiny longer modal" style="height: 55% !important;">
+</div>
+
+{% endblock %}
+
+{% block section_actualizacion %}
+
+<!-- Tabla -->
+<table id="table_modulo_1" class="ui basic table" style="border-collapse: collapse; margin-top: 30px;">
+  <thead>
+    <tr>
+      <th colspan="7">
+        <button type="button" onclick="modal_fila('module_body_1', 'total_modulo_1')"
+          style="background-color: #FFC600; color: white; padding: 0.5em 0.5em;" class="ui icon button">
+          <i class="edit icon" style="font-size: 12px;"></i>
+        </button>
+        MÓDULO 1 (ANDENES 1,2 Y PUERTA 1)
+      </th>
+      <th colspan="2">
+        <div class="ui fluid left icon transparent input">
+          <input data-totalmodulo="1" onclick="deleteValInput($(this))" onkeyup="convertTextToMoney($(this))" 
+          onblur="calculoTotalModule($(this))" onload="totalModule($(this))" value="185600.00" 
+          type="text" class="modulo_total" id="total_modulo_1"
+            style="padding-left: 17px !important;">
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody id="module_body_1">
+    <tr>
+      <td style="border-left: 3px  #FE0919 solid; width: 9%;"><i class="arrows alternate icon icon-tramitologia"></i></td>
+      <td style="width: 7%;">0</td>
+      <td style="width: 19%;">
+        <div class="ui fluid transparent  input">
+          <input  type="text" class=""  value="Demoliciones Lorem ipsum dolor sit amet,  acorrupti, adipisci m inqwe." >
+        </div>
+      </td>
+      <td style="width: 9%;">
+        <div class="ui inline fluid dropdown dropdown-estatus">
+          <div class="text" style="color: #FE0919;">
+            Urgente
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #FE0919;">
+              Urgente
+            </div>
+            <div class="item" style="color: #FF8C00;">
+              Alta
+            </div>
+            <div class="item" style="color: #00CF61;">
+              Media
+            </div>
+            <div class="item" style="color: #FFC600;">
+              Baja
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 19%;">
+        <div class="ui indicating fluid progress" data-percent="100"
+          style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 15%;">
+        <div class="ui fluid transparent input" style="cursor: pointer;">
+          <input type="text" onload="LoadCalendar($(this))" onblur="BluerCalendar($(this))" class="date_range" name="datefilter"
+          value="30/04/2020 - 05/06/2020" id="date_value_0" />
+        </div>
+      </td>
+      <td style="width: 10%;">
+        <div class="ui fluid left icon transparent input porcentajeDiv">
+          <input type="text" class="porcentajeInput" value="0" style="padding-left: 17px !important;">
+          <i class="percent icon" style="font-size: 14px !important;" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 8%;">
+        <div class="ui fluid left icon transparent input numeros">
+          <input type="text" onclick="deleteValInput($(this))" 
+          onkeyup="convertTextToMoney($(this))" onload="LoadCosto($(this), 'total_modulo_1')" 
+          onblur="calculoTotalModule($(this))"
+          class="costos" value="150000.00"
+            style="padding-left: 25px !important;">
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 4%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr>
+      <td style="border-left: 3px  #00CF61 solid; width: 9%;"><i class="arrows alternate icon icon-tramitologia"></i></td>
+      <td style="width: 7%;">1</td>
+      <td style="width: 19%;">
+        <div class="ui fluid transparent  input">
+          <input  type="text" class=""  value="Cimentación, IS" >
+        </div>
+        </td>
+      <td style="width: 9%;">
+        <div class="ui inline fluid dropdown dropdown-estatus">
+          <div class="text" style="color: #00CF61;">
+            Media
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #FE0919;">
+              Urgente
+            </div>
+            <div class="item" style="color: #FF8C00;">
+              Alta
+            </div>
+            <div class="item" style="color: #00CF61;">
+              Media
+            </div>
+            <div class="item" style="color: #FFC600;">
+              Baja
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 19%;">
+        <div class="ui indicating fluid progress" data-percent="100"
+          style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 15%;">
+        <div class="ui fluid transparent input" style="cursor: pointer;">
+          <input type="text" onload="LoadCalendar($(this))" onblur="BluerCalendar($(this))" class="date_range" name="datefilter"
+          value="15/04/2020 - 19/04/2020" id="date_value_2" />
+        </div>
+      </td>
+      <td style="width: 10%;">
+        <div class="ui fluid left icon transparent input porcentajeDiv">
+          <input type="text" class="porcentajeInput" value="0" style="padding-left: 17px !important;">
+          <i class="percent icon" style="font-size: 14px !important;" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 8%;">
+        <div class="ui fluid left icon transparent input numeros">
+          <input type="text" onclick="deleteValInput($(this))" onkeyup="convertTextToMoney($(this))" 
+          onblur="calculoTotalModule($(this))"
+          onload="LoadCosto($(this), 1, 'total_modulo_1')" class="costos" value="0.00"
+            style="padding-left: 25px !important;">
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 4%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+    <tr>
+      <td style="border-left: 3px  #FFC600 solid; width: 9%;"><i class="arrows alternate icon icon-tramitologia"></i></td>
+      <td style="width: 7%;">2</td>
+      <td style="width: 19%;">
+        <div class="ui fluid transparent  input">
+          <input  type="text" class=""  value="Preliminares, IS" >
+        </div>
+      </td>
+      <td style="width: 9%;">
+        <div class="ui inline fluid dropdown dropdown-estatus">
+          <div class="text" style="color: #FFC600;">
+            Baja
+          </div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" style="color: #FE0919;">
+              Urgente
+            </div>
+            <div class="item" style="color: #FF8C00;">
+              Alta
+            </div>
+            <div class="item" style="color: #00CF61;">
+              Media
+            </div>
+            <div class="item" style="color: #FFC600;">
+              Baja
+            </div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 19%;">
+        <div class="ui indicating fluid progress" data-percent="100"
+          style="max-width: 90%; margin-left: 0em !important;">
+          <div class="bar">
+            <div class="progress"></div>
+          </div>
+        </div>
+      </td>
+      <td style="width: 15%;">
+        <div class="ui fluid transparent input" style="cursor: pointer;">
+          <input type="text" onload="LoadCalendar($(this))" onblur="BluerCalendar($(this))" class="date_range" name="datefilter"
+          value="25/03/2020 - 03/06/2020" id="date_value_3" />
+        </div>
+      </td>
+      <td style="width: 10%;">
+        <div class="ui fluid left icon transparent input porcentajeDiv">
+          <input type="text" class="porcentajeInput" value="0" style="padding-left: 17px !important;">
+          <i class="percent icon" style="font-size: 14px !important;" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 8%;">
+        <div class="ui fluid left icon transparent input numeros">
+          <input type="text" onclick="deleteValInput($(this))" onkeyup="convertTextToMoney($(this))" onload="LoadCosto($(this), 'total_modulo_1')" 
+          onblur="calculoTotalModule($(this))"
+          class="costos" value="10000.00"
+            style="padding-left: 25px !important;">
+          <i class="dollar sign icon" style="font-size: 14px !important;"></i>
+        </div>
+      </td>
+      <td style="width: 4%;">
+        <i class="trash icon icon-tramitologia"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+{% endblock %}
+{% block extra %}
+<div class="ui grid">
+  <div class="row">
+    <div class="twelve wide column "></div>
+    <div class="four wide column" style="padding-left: 4%;">
+      <p><b>SUBTOTAL</b> <span id="totalSub"></span></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column "></div>
+    <div class="four wide column" style="padding-left: 4%;">
+      <p><b>IVA</b> <span id="totalIVA"></span></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve wide column "></div>
+    <div class="four wide column" style="padding-left: 4%;">
+      <p><b>TOTAL</b> <span id="totalGeneral"></span></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{%  block scripts_personalizade  %}
+<script src="{% static 'js/roles/programaDeObra.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "users/baseAdmin.html" %}
+{% load static %}
+{% block head_content %}
+<title>GE | Lista de tramites</title>
+{% endblock head_content %}
+{% load static %}
+{% block statics_files %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
+<link rel="stylesheet" href="{% static 'css/daterangepicker.css' %}">
+{% endblock %}
+{% block section %}
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/moment.js' %}"></script>
+<script src="{% static 'js/daterangepicker.js' %}"></script>
+<section>
+  {% block breadcrumb %}
+  {% endblock %}
+</section>
+
+<section class="info-table-dta">
+  {% block header %}
+
+  {% endblock %}
+</section>
+ 
+<section class="info-section" id="container-desktop">
+{% block section_actualizacion %}
+  
+{% endblock %}
+</section>
+<section class="extra_info">
+  {% block extra %}
+  
+{% endblock %}
+</section>
+<section class="info-section" id="container-mobil">
+  {% block section_actualizacion_mobil %}
+    
+  {% endblock %}
+</section>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+  $('.ui.inline.dropdown').dropdown();
+  $('.ui.indicating.progress').progress();
+  
+</script>
+{%  block scripts_personalizade  %}
+{% endblock %}
+{% endblock %}
+

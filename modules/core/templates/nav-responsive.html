@@ -1,0 +1,120 @@
+{% load static %}
+ <!-- --------------------------------- menu responsive --------------------------------->
+
+ <div class="ui left demo vertical inverted sidebar labeled icon menu" id="menu-toogle">
+    <div class="item">
+        <img src="{% static 'img/prueba.png' %}" alt="">
+    </div>
+    {% if user.is_staff %}
+    <a {% if request.path == '/ge/users/list/' %} href="#" style="color: #FFC600;" {% endif %}"
+        href="{% url 'userList' %}" class="item"><i class="users icon"></i> <span
+            class="hidden-menu">USUARIOS</span></a><br>
+    <a {% if request.path == '/ge/projects/list/' %} href="#" style="color: #FFC600;" {% endif %}
+        href="{% url 'projectList' %}" class="item"><i class="wrench icon"></i> <span
+            class="hidden-menu">PROYECTOS</span></a><br>
+    <a {% if request.path == '/ge/clients/list/' %} href=" #" style="color: #FFC600;" {% endif %}
+        href="{% url 'clientList' %}" class="item"><i  class="handshake outline icon"></i><span
+            class="hidden-menu">CLIENTES</span></a><br>
+            <a {% if request.path == '/ge/' %} href="#" style="color: #FFC600;" {% endif %} href="{% url 'home' %}"
+        class="item"><i class="tachometer alternate icon"></i> <span class="hidden-menu">DASHBOARD</span></a>
+    <hr>
+    {% elif user.userPerson.management %}
+    <a {% if request.path == '/ge/users/list/' %} href="#" style="color: #FFC600;" {% endif %}"
+        href="{% url 'userList' %}" class="item"><i class="users icon"></i> <span
+            class="hidden-menu">USUARIOS</span></a><br>
+    <a {% if request.path == '/ge/projects/list/' %} href="#" style="color: #FFC600;" {% endif %}
+        href="{% url 'projectList' %}" class="item"><i class="wrench icon"></i> <span
+            class="hidden-menu">PROYECTOS</span></a><br>
+    <a {% if request.path == '/ge/clients/list/' %} href=" #" style="color: #FFC600;" {% endif %}
+        href="{% url 'clientList' %}" class="item"><i class="handshake outline icon"></i><span
+            class="hidden-menu">CLIENTES</span></a><br>
+            <a {% if request.path == '/ge/' %} href="#" style="color: #FFC600;" {% endif %} href="{% url 'home' %}"
+        class="item"><i class="tachometer alternate icon"></i> <span class="hidden-menu">DASHBOARD</span></a>
+    <hr>
+    <a {% if request.path == '/ge/' %} href="#" style="color: #FFC600;" {% endif %} href="{% url 'home' %}"
+        class="item"><i class="tachometer alternate icon"></i> <span class="hidden-menu">DASHBOARD</span></a>
+    <hr>
+    {% else %}
+    <a {% if request.path == '/ge/' %} href="#" style="color: #FFC600;" {% endif %} href="{% url 'home' %}"
+        class="item"><i class="tachometer alternate icon"></i> <span class="hidden-menu">DASHBOARD</span></a>
+        {% if user.userRol.position == "GE Costos" %}
+            <a href="{% url 'costo' %}" class="item"><i class="dollar sign icon"></i> <span class="hidden-menu">COSTOS</span></a>
+            
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Contabilidad"  %}
+            <a href="#" class="item">
+                    <i class="archive icon" ></i> <span class="hidden-menu">CONTABILIDAD</span></a>
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Tramitologia" %}
+            <a href="{% url 'tramitologia' %}" class="item"><i class="file alternate outline icon"></i> <span class="hidden-menu">TRÁMITES</span></a>
+            
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Estimaciones" %}
+            <a href="#" class="item"><i class="calculator icon"></i> <span class="hidden-menu">ESTIMACIONES</span></a>
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Compras" %}
+            <a href="#" class="item"><i class="shopping bag icon"></i> <span class="hidden-menu">COMPRAS</span></a>
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Avance de Obra" %}
+            <a href="#" class="item"><i class="calendar alternate outline icon"></i> <span class="hidden-menu">AVANCE
+                        OBRA</span></a>
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Programa de obra" %}
+            <a href="#" class="item"><i class="clipboard list icon"></i> <span class="hidden-menu">PROG.
+                        OBRA</span></a>
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Residente" %}
+            <a href="#" class="item"><i class="suitcase icon"></i> <span class="hidden-menu">RESIDENTE</span></a>
+            {% else %}
+            {% endif %}
+    <hr>
+    {% endif %}
+    {% if user.userRol.position == "GE Costos" %}
+            <a href="{% url 'costo' %}" class="item"><i class="dollar sign icon"></i> <span class="hidden-menu">COSTOS</span></a>
+            
+            {% else %}
+            {% endif %}
+            {% if user.userRol.position == "GE Contabilidad"  %}
+            {% else %}
+                <a href="#" class="item">
+                        <i class="archive icon"></i> <span class="hidden-menu">CONTABILIDAD</span></a> <br>
+            {% endif %}
+            {% if user.userRol.position == "GE Tramitologia" %}
+            
+            {% else %}
+            <a href="{% url 'tramitologia' %}" class="item"><i class="file alternate outline icon"></i> <span class="hidden-menu">TRÁMITES</span></a><br>
+            {% endif %}
+            {% if user.userRol.position == "GE Estimaciones" %}
+            {% else %}
+            <a href="#" class="item"><i class="calculator icon"></i> <span class="hidden-menu">ESTIMACIONES</span></a><br>
+            {% endif %}
+            {% if user.userRol.position == "GE Compras" %}
+            {% else %}
+            <a href="#" class="item"><i class="shopping bag icon"></i> <span class="hidden-menu">COMPRAS</span></a><br>
+            {% endif %}
+            {% if user.userRol.position == "GE Avance de Obra" %}
+            {% else %}
+                <a href="#" class="item"><i class="calendar alternate outline icon"></i> <span class="hidden-menu">AVANCE
+                            OBRA</span></a><br>
+            {% endif %}
+            {% if user.userRol.position == "GE Programa de obra" %}
+            {% else %}
+                <a href="#" class="item"><i class="clipboard list icon"></i> <span class="hidden-menu">PROG.
+                            OBRA</span></a> <br>
+            {% endif %}
+            {% if user.userRol.position == "GE Residente" %}
+            {% else %}
+            <a href="#" class="item"><i class="suitcase icon"></i> <span class="hidden-menu">RESIDENTE</span></a> <br>
+            {% endif %}
+    <a class="item" href="#"><i class="address book outline icon"></i> <span class="hidden-menu"
+            style="margin-bottom: 0px">CONTACTOS</span></a>
+</div>
+
+<!-- --------------------------------------------------------------------------------- -->

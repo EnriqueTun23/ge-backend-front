@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <link href="{% static 'css/modal-table.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    {% block staticFile %}
+    {% endblock %}
+</head>
+<body style="width: 100%;">
+    {% block container %}
+        
+    {% endblock %}
+    <!-- jquery -->
+    <script src="{% static 'js/jquery-min.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js'%}"></script>
+    <!-- javascripts -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

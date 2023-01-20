@@ -1,0 +1,191 @@
+/* style css table */
+.control {
+    width: 100%;
+    margin-top: 1%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+}
+.info-table-dta {
+    margin-top: 1%;
+    height: 110px;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    background-color: white;
+}
+.info-section {
+    margin-top: 0%;
+    height: 72%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    
+}
+.extra_info {
+    margin-top: -5%;
+    position: fixed;
+    width: 100%;
+    background-color: white;
+}
+#table_movil {
+    visibility: hidden;
+}
+.btn-user a {
+    color: #FFC600 !important;
+    font-size: 16pt;
+    cursor: pointer;
+}
+.tableP {
+    width: 90%;
+    margin-top: 100px;
+}
+.tableP-row-select {
+    background-color:#eeeeee;
+    border-top: 1px #c9c6c6 solid;
+    border-right: 1px #c9c6c6 solid;
+    border-left: 1px #c9c6c6 solid;
+    border-radius: 25px 25px 0px 0px;
+}
+.tableP-row-select .column {
+    padding-top: 12px;
+}
+.tableTitulo {
+    font-weight: 700;
+    color: #c9c6c6;
+
+}
+
+.nombre-hover {
+    border-color: transparent;
+    width: 100px;
+
+}
+.nombre-hover:focus {
+    border-bottom: 1px #c9c6c6 solid;
+    outline-color: transparent;
+}
+.input-min-hover {
+    width: 40px;
+    border-color: transparent;
+}
+.input-min-hover:focus {
+    border-bottom: 1px #c9c6c6 solid;
+    outline-color: transparent;
+}
+.input-max-hover {
+    width: 75px;
+    border-color: transparent;
+}
+.input-max-hover:focus {
+    border-bottom: 1px #c9c6c6 solid;
+    outline-color: transparent;
+}
+
+
+.tr-tramitologia {
+     
+    cursor: pointer;
+    color: #707070 !important;
+}
+
+.tr-tramitologia:hover{
+   background-color:  #F7F7F7;
+}
+
+/* table tramitolia */
+
+.proceso-label {
+    top: 0% !important;  
+    width: 100% !important;
+}
+.proceso-label-container {
+    width: 100%; 
+    position: relative;
+}
+.proceso-left {
+    color: #77777A;
+    cursor: pointer; 
+    font-size: 7px; 
+    position: absolute; 
+    left: -18px;
+}
+.proceso-right {
+    color: #77777A;
+    cursor: pointer; 
+    font-size: 7px; 
+    position: absolute; 
+    right:  -20px;
+}
+/*----------------  */
+/* header table tramitolia */
+/* .header-table {
+    padding: 10px 0px !important;
+    color: #C9C6C6 !important;
+}
+
+.body-table {
+    color: #77777A;
+    font-size: 14px;
+    padding: 10px 0px !important;
+} */
+.btn-seccion {
+    background-color: #FFC600 !important; 
+    color: white !important;  
+    padding-left: 5em !important; 
+    font-weight: 500 !important;
+    cursor: pointer !important;
+}
+.input-calendar {
+    width: 100% !important;
+    font-size: 12px !important; 
+    border: 0 !important; 
+    cursor:pointer !important;
+}
+.icon-tramitologia {
+    font-size: 20px !important;
+    cursor: pointer;
+}
+.trash_list:hover {
+    color: #FFC600;
+}
+/* ----------------------- */
+
+/* ------------------ tabla costos -------------------- */
+.row-inicial {
+    border-bottom: 1px #C9C6C6 solid;
+    
+    border-top: 1px #C9C6C6 solid;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    cursor: pointer;
+    color: #77777A;
+}
+.row-content {
+    border-bottom: 1px #C9C6C6 solid;
+    cursor: pointer;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #77777A;
+}
+.row-inicial .one.wide.column i {
+    color: #C9C6C6;
+    cursor: pointer;
+    float: right;
+}
+.row-inicial .one.wide.column i:hover {
+    color: #77777A;
+}
+.row-content .one.wide.column i {
+    color: #C9C6C6;
+    cursor: pointer;
+    float: right;
+}
+.row-content .one.wide.column i:hover {
+    color: #77777A;
+}
+/* ---------------------------------------------------- */

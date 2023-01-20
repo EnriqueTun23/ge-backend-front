@@ -1,0 +1,166 @@
+/* select modal */
+.select-user-data {
+    display: flex;
+    flex-flow: wrap row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.select-user-data h3 {
+    width: 95%;
+}
+.content-select select{
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+.content-select select::-ms-expand {
+    display: none;
+}
+.content-select{
+    width: 90%;
+    margin-top: 25px;
+    max-width: 100%;
+	position: relative;
+}
+ 
+.content-select select{
+	display: inline-block;
+	width: 100%;
+	cursor: pointer;
+  	padding: 7px 10px;
+  	height: 42px;
+  	outline: 0; 
+  	border: 0;
+	border-radius: 0;
+	background: white;
+	color: black;
+	font-size: 1em;
+	font-family: 
+	'Quicksand', sans-serif;
+	border:2px solid #77777A;
+    position: relative;
+    transition: all 0.25s ease;
+}
+.content-select i{
+    position: absolute;
+    color: #FFC600;
+    font-size: 40px;
+	right: 20px;
+	top: calc(50% - 19px);
+	display: block;
+	transition: all 0.25s ease;
+}
+/* end select modal */
+.data-info {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+}
+
+/* create user tabs */
+.form-user {
+    width: 90%; 
+}
+/*---------- end create user tabs ---------- */
+
+/* style css table */
+.SectionModel {
+    border-bottom: 1px #c9c6c6 solid;
+    border-left: 1px #c9c6c6 solid;
+    border-right: 1px #c9c6c6 solid;
+    border-radius: 0px 0px 25px 25px;
+    -webkit-box-shadow: 8px 9px 12px -9px rgba(85, 86, 90, 0.94);
+    -moz-box-shadow: 8px 9px 12px -9px rgba(85, 86, 90, 0.94);
+    box-shadow: 8px 9px 12px -9px rgba(85, 86, 90, 0.94);
+    height: 350px;
+}
+.delete-icon {
+    position: absolute;
+    left: 82.5%;
+    top: -8%;
+    font-size: 16px;
+    color: black;
+}
+.edit-icon {
+    position: absolute;
+    left: 85.5%;
+    top: -8%;
+    font-size: 16px;
+    color: black;
+}
+.ui.table {
+    border: 0px !important;
+}
+.label-form {
+    margin-right: 0% !important;
+    width: 60px !important;
+}
+.label-form-two {
+    margin-right: 0px !important;
+    width: 100px !important;
+    color: #c9c6c6;
+}
+.label-form-img {
+    margin-left: 25% !important;
+    width: 60px !important;
+    cursor: pointer !important;
+}
+select option {
+    background-color: #FFC600;
+}
+
+.dataUser {
+    width: 35%;
+    height: 100%;
+    border-left: 1px #c9c6c6 solid;
+}
+
+.dataUser h3 {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.form-create {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    width: 100%;
+}
+.form-create button {
+    background-color: #FFC600;
+    color: white;
+    padding: 12px 16px;
+    margin-top: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 50px;
+    font-size: 14px;
+    min-width: 84px;
+}
+
+/*------------------------------------- format input create forms ------------------------*/
+
+.icon-sizee {
+    font-size: 20px;
+}
+/*------------------------------------- format input create forms ------------------------*/
+
+/* ------------------------------------ boton de update modal --------------------------- */
+.bt-update {
+    background: #FFC600 !important; 
+    color: white !important;
+    margin-top: 15px !important;
+}
+.bt-update:hover {
+    background: rgba(255, 198, 0, .8) !important;
+}
+/* ------------------------------------ boton de update modal --------------------------- */
